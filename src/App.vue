@@ -24,7 +24,7 @@ function actualizaDatosSesion(usuario){
 <template>
   <div class="layout">
 
-    <Header :datosUsuario="sesion" :usuarioAutenticado="sesion" @sesionCerrada="actualizaDatosSesion"  title="VIAJES MANOLO"/>
+    <Header :datosUsuario="sesion" :usuarioAutenticado="sesion" @sesionCerrada="actualizaDatosSesion"  title="DREAM TRIP"/>
     <!--HACER E INCLUIR COMPONENTE DE BARRA DE NAVEGACIÓN CON OPCIONES VISIBLES SEGÚN EL ROL DEL USUARIO-->
     
     
