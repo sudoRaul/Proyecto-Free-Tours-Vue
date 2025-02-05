@@ -7,11 +7,11 @@
       </span>
       <br>
       <div class="">
-        <img src="@/images/facebook.svg" alt="Logo Facebook" width="34px" height="34px">
-        <img src="@/images/ig.svg" alt="Logo Instagram" width="34px" height="34px">
-        <img src="@/images/x.svg" alt="Logo X" width="44px" height="44px">
-        <img src="@/images/linkedin.svg" alt="Logo LinkedIn" width="34px" height="34px">
-        <img src="@/images/yt.svg" alt="Logo YouTube" width="34px" height="34px" class="pl-10">
+        <img src="@/images/facebook.svg" alt="Logo Facebook" width="28px" height="28px">
+        <img src="@/images/ig.svg" alt="Logo Instagram" width="28px" height="28px">
+        <img src="@/images/x.svg" alt="Logo X" width="38px" height="38px">
+        <img src="@/images/linkedin.svg" alt="Logo LinkedIn" width="28px" height="28px">
+        <img src="@/images/yt.svg" alt="Logo YouTube" width="28px" height="28px" class="pl-10">
       </div>
       <p><p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">DreamTrip</span>
       by <span property="cc:attributionName">Raul Rodriguez</span> is licensed under 
@@ -20,7 +20,7 @@
       src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
       <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" 
       src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
-      <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" 
+      <img style="height:22px;margin-left:3px;vertical-align:text-bottom;" 
       src="https://mirrors.creativecommons.org/presskit/icons/nd.svg?ref=chooser-v1" alt=""></a></p></p>
     </footer>
   </template>
