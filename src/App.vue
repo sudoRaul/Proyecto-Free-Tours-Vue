@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
+
 
 const usuarioAutenticado = ref(null);
 
@@ -33,4 +35,5 @@ function manejarSesionCerrada() {
     @sesionCerrada="manejarSesionCerrada"
   />
   <router-view />
+  <Footer></Footer>
 </template>
