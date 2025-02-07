@@ -34,6 +34,25 @@
         <span class="visually-hidden">Siguiente</span>
       </button>
     </div>
+
+    <div class="row">
+        <h2>¿Por qué elegirnos?</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Experiencias personalizadas</h3>
+                <p>Tours adaptados a las <br>necesidades de los clientes</p>
+            </div>
+            <div class="col-md-4">
+                <h3>Guías expertos</h3>
+                <p>Equipo formado por profesionales <br>con profundo conocimiento histórico y cultural</p>
+            </div>
+            <div class="col-md-4">
+                <h3>Comodidad y seguridad</h3>
+                <p>Seguros de viaje, atención al cliente 24 horas <br>los 365 días del año y cancelación gratuita</p>
+            </div>
+        </div>
+    </div>
+
   </template>
   
   <style scoped>
