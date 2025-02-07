@@ -48,16 +48,16 @@ function cerrarModalRegistro() {
 // Función para iniciar sesión
 async function iniciarSesion() {
   try {
-    const response = await fetch("http://localhost/APIFreetours/usuarios.php");
+    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios");
     const usuarios = await response.json();
 
     const usuarioEncontrado = usuarios.find(
-      (u) => u.nombre === form.value.usuario && u.contrase\u00f1a === form.value.password
+      (u) => u.email == form.value.usuario && u.contraseña == form.value.password
     );
 
     if (usuarioEncontrado) {
       emit("sesionIniciada", {
-        usuario: usuarioEncontrado.usuario,
+        usuario: usuarioEncontrado.nombre,
         rol: usuarioEncontrado.rol
       });
       
