@@ -3,18 +3,51 @@
 
 const video = ref(null);
 const showControls = ref(false);
+const isPlaying = ref(false);
+const isMuted = ref(false);
+const isFullscreen = ref(false);
+const speed = ref(1); // Velocidad inicial x1
 
-const playVideo = () => video.value.play();
-const pauseVideo = () => video.value.pause();
-const stopVideo = () => {
-  video.value.pause();
-  video.value.currentTime = 0;
+
+const pausePlay = () => {
+  if (video.value.paused) {
+    video.value.play();
+    isPlaying.value = true;
+  } else {
+    video.value.pause();
+    isPlaying.value = false;
+  }
 };
+
 const volumeUp = () => {
   if (video.value.volume < 1) video.value.volume += 0.1;
 };
+
 const volumeDown = () => {
   if (video.value.volume > 0) video.value.volume -= 0.1;
+};
+
+const mute = () => {
+  video.value.muted = !video.value.muted;
+  isMuted.value = video.value.muted;
+};
+const toggleFullscreen = () => {
+  if (!document.fullscreenElement) {
+    video.value.requestFullscreen?.() || video.value.webkitRequestFullscreen?.();
+    isFullscreen.value = true;
+  } else {
+    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+    isFullscreen.value = false;
+  }
+};
+
+const increaseSpeed = () => {
+  if (speed.value < 2) {
+    speed.value += 0.5;
+    video.value.playbackRate = speed.value;
+  }else{
+    speed.value = 1
+  }
 };
 
 
@@ -127,17 +160,18 @@ const volumeDown = () => {
     <div class="mb-5">
       <h2 class="text-center fw-bold mb-4">¡Sigue nuestros vídeos en nuestras plataformas!</h2>
       <div class="video-container" @mouseover="showControls = true" @mouseleave="showControls = false">
-    <video ref="video">
+    <video ref="video" @play="isPlaying = true" @pause="isPlaying = false">
       <source src="@/images/videoRonda.mp4" type="video/mp4" />
-      <source src="@/images/videoRondaFire.ogg" type="video/ogg" />
+      <source src="@/images/videoRondaFire.ogg" type="video/mp4"/>
     </video>
 
     <div class="controls" v-show="showControls">
-      <button @click="playVideo">▶️</button>
-      <button @click="pauseVideo">⏸️</button>
-      <button @click="stopVideo">⏹️</button>
+      <button @click="pausePlay">{{ isPlaying ? "⏸️" : "▶️" }}</button>
+      <button @click="mute">{{ isMuted ? "🔇" : "🔊" }}</button>
+      <button @click="increaseSpeed">⏩ x{{ speed }}</button>
       <button @click="volumeUp">🔊</button>
       <button @click="volumeDown">🔉</button>
+      <button @click="toggleFullscreen">{{ "🔳" }}</button>
     </div>
   </div>
     </div>

@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import router from "../router";
 import { Modal } from "bootstrap";
-import { computed } from "vue";
 
 
 const emit = defineEmits(["sesionIniciada", "sesionCerrada"]);
@@ -131,6 +130,7 @@ async function registrarUsuario() {
 function cerrarSesion() {
   emit("sesionCerrada", null);
   localStorage.removeItem("sesion");
+  router.push("./")
 }
 </script>
 
@@ -156,6 +156,9 @@ function cerrarSesion() {
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
               <a class="nav-link" @click.prevent="router.push('./crear-ruta')" href="#">Crear ruta</a>
+            </li>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./ver-rutas')" href="#">Ver todas las rutas</a>
             </li>
 
             <!-- Opciones para Guía -->

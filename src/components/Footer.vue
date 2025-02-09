@@ -8,10 +8,10 @@
       <br>
       <div>
         <img src="@/images/iconos/facebook.svg" alt="Logo Facebook" width="28px" height="28px" class="me-1">
-        <img src="@/images/iconos/ig.svg" alt="Logo Instagram" width="28px" height="28px" class="ms-1">
+        <img src="@/images/iconos/ig.png" alt="Logo Instagram" width="28px" height="28px" class="ms-1">
         <img src="@/images/iconos/x.svg" alt="Logo X" width="38px" height="38px" class="ms-1">
-        <img src="@/images/iconos/linkedin.svg" alt="Logo LinkedIn" width="28px" height="28px" class="ms-1">
-        <img src="@/images/iconos/yt.svg" alt="Logo YouTube" width="28px" height="28px" class="ms-3">
+        <img src="@/images/iconos/linkedin.png" alt="Logo LinkedIn" width="28px" height="28px" class="ms-1">
+        <img src="@/images/iconos/yt.png" alt="Logo YouTube" width="28px" height="28px" class="ms-3">
       </div>
       <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">DreamTrip</span>
       by <span property="cc:attributionName">Raul Rodriguez</span> is licensed under <br>
