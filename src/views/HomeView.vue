@@ -1,3 +1,24 @@
+<script setup>
+ import { ref } from "vue";
+
+const video = ref(null);
+const showControls = ref(false);
+
+const playVideo = () => video.value.play();
+const pauseVideo = () => video.value.pause();
+const stopVideo = () => {
+  video.value.pause();
+  video.value.currentTime = 0;
+};
+const volumeUp = () => {
+  if (video.value.volume < 1) video.value.volume += 0.1;
+};
+const volumeDown = () => {
+  if (video.value.volume > 0) video.value.volume -= 0.1;
+};
+
+
+</script>
 <template>
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">
@@ -35,8 +56,42 @@
       </button>
     </div>
 
+    <div class="mt-5">
+      <h2 class="text-center fw-bold mb-3" id="reservar" >Planificamos tu próxima aventura</h2>
+      <div class="container text-center">
+        <form>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <input type="text" class="form-control search-slt" placeholder="Introduzca la ciudad" required>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <input type="date" class="form-control search-slt" placeholder="Enter Drop City">
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <select class="form-control search-slt" id="exampleFormControlSelect1">
+                                <option>Select Vehicle</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                            <button type="button" class="btn btn-primary wrn-btn">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+
     <div class="row mt-5 mb-5">
-        <h2 class="text-center fw-bold">¿Por qué elegirnos?</h2>
+        <h2 class="text-center fw-bold" id="quienesSomos">¿Por qué elegirnos?</h2>
         <div class="row mt-3 text-center">
             <div class="col-4">
               <img src="@/images/iconos/phoneIcon.png" alt="Icono Teléfono">
@@ -56,16 +111,115 @@
         </div>
     </div>
 
-    <div class="row">
-      <h2 class="text-center fw-bold">Mejores destinos</h2>
+    <div id="topDestinos">
+      <h2 class="text-center fw-bold mb-4">Mejores destinos</h2>
+      <div class="row justify-content-around mb-5">
+        <img src="@/images/contenido/madrid.jpg" alt="Foto Madrid" title="Madrid" class="imagenContenedor col-3 mb-4">
+        <img src="@/images/contenido/canada.jpg" alt="Foto Canada" title="Canadá" class="imagenContenedor col-3">
+        <img src="@/images/contenido/paris.jpg" alt="Foto Paris" title="París" class="imagenContenedor col-3">
+        <img src="@/images/contenido/japon.jpg" alt="Foto Japon" title="Japón" class="imagenContenedor col-3">
+        <img src="@/images/contenido/australia.jpg" alt="Foto Australia" title="Australia" class="imagenContenedor col-3">
+        <img src="@/images/contenido/roma.jpg" alt="Foto Roma" title="Roma" class="imagenContenedor col-3">
+        <img src="@/images/contenido/sf.jpg" alt="Foto San Francisco" title="San Francisco" class="imagenContenedor col-3">
+        <img src="@/images/contenido/londres.jpg" alt="Foto Londres" title="Londres" class="imagenContenedor col-3">
+      </div>
     </div>
+    <div class="mb-5">
+      <h2 class="text-center fw-bold mb-4">¡Sigue nuestros vídeos en nuestras plataformas!</h2>
+      <div class="video-container" @mouseover="showControls = true" @mouseleave="showControls = false">
+    <video ref="video">
+      <source src="@/images/videoRonda.mp4" type="video/mp4" />
+      <source src="@/images/videoRondaFire.ogg" type="video/ogg" />
+    </video>
 
+    <div class="controls" v-show="showControls">
+      <button @click="playVideo">▶️</button>
+      <button @click="pauseVideo">⏸️</button>
+      <button @click="stopVideo">⏹️</button>
+      <button @click="volumeUp">🔊</button>
+      <button @click="volumeDown">🔉</button>
+    </div>
+  </div>
+    </div>
   </template>
   
   <style scoped>
   .carousel-image {
     object-fit: cover;
     height: 400px;
-  }
+  }.imagenContenedor {
+    width: 350px;
+    height: 150px;
+    border-radius: 50px;
+    transition: transform 0.5s ease;
+  }.imagenContenedor:hover {
+    transform: scale(1.1);
+}
+.video-container {
+      position: relative;
+      width: 600px;
+      margin: auto;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .video-container:hover .controls {
+      opacity: 1;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: background 0.2s;
+    }
+
+    .controls button:hover {
+      background: white;
+    }
+    .search-sec{
+    padding: 2rem;
+}
+.search-slt{
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #55595c;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+.wrn-btn{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
   </style>
   

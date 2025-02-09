@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import router from "../router";
 import { Modal } from "bootstrap";
+import { computed } from "vue";
+
 
 const emit = defineEmits(["sesionIniciada", "sesionCerrada"]);
 
@@ -10,7 +12,6 @@ const props = defineProps({
   usuarioAutenticado: Object,
   datosUsuario: Object
 });
-
 
 const modalLogin = ref(null);
 const modalRegistro = ref(null);
@@ -136,29 +137,51 @@ function cerrarSesion() {
 <template>
   <header class="bg-light text-black align-items-center row">
     <div class="row">
-      <h1 class="col-4">
+      <h1 class="col-3">
         <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
         {{ title }}
       </h1>
 
-      <div class="navbar navbar-expand-lg navbar-light col-5 pb-4">
+      <div class="navbar navbar-expand-lg navbar-light col-6 pb-4">
         <div class="collapse navbar-collapse align-items-center justify-content-center">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a class="nav-link" @click.prevent="router.push('./')" href="#">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cosa 1</a>
+            
+            
+            <!-- Opciones para Administrador -->
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./admin')" href="#">Lista de usuarios</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cosa</a>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./crear-ruta')" href="#">Crear ruta</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cosa</a>
+
+            <!-- Opciones para Guía -->
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'guia'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./visitas-pendientes')" href="#">Visitas pendientes</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cosa</a>
+
+            <!-- Opciones para Cliente -->
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./mis-reservas')" href="#">Mis reservas</a>
             </li>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
+              <a class="nav-link" @click.prevent="router.push('./valoraciones')" href="#">Valoraciones</a>
+            </li>
+
+            <li class="nav-item">
+              <a v-if="!usuarioAutenticado" class="nav-link" href="#reservar">Reservar Viaje</a>
+            </li>
+            <li v-if="!usuarioAutenticado" class="nav-item">
+              <a class="nav-link" href="#topDestinos">Mejores destinos</a>
+            </li>
+
+            <li v-if="!usuarioAutenticado" class="nav-item">
+              <a class="nav-link" href="#quienesSomos">Sobre nosotros</a>
+            </li>
+           
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link" href="#" @click.prevent="abrirModalLogin">Login</a>
             </li>
