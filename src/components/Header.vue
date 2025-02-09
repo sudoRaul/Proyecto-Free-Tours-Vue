@@ -11,7 +11,7 @@ const props = defineProps({
   datosUsuario: Object
 });
 
-// Referencias a los modales
+
 const modalLogin = ref(null);
 const modalRegistro = ref(null);
 let modalInstanceLogin = null;
@@ -20,7 +20,10 @@ let modalInstanceRegistro = null;
 // Datos de los formularios de inicio de sesión y registro
 const form = ref({ usuario: "", password: "" });
 const formRegistro = ref({ usuario: "", email: "", password: "" });
-const error = ref("");
+
+// Variables reactivas para errores
+const errorLogin = ref("");
+const errorRegistro = ref("");
 
 // Función para mostrar el modal de login
 function abrirModalLogin() {
@@ -61,40 +64,66 @@ async function iniciarSesion() {
         rol: usuarioEncontrado.rol
       });
       
-      error.value = "";
+      errorLogin.value = "";
       cerrarModalLogin();
     } else {
-      error.value = "Usuario o contraseña incorrectos";
+      errorLogin.value = "Usuario o contraseña incorrectos";
+      // Limpiar el formulario de login tras un intento fallido
+      form.value.usuario = "";
+      form.value.password = "";
     }
   } catch (err) {
-    error.value = "Error al cargar los datos";
+    errorLogin.value = "Error al cargar los datos";
+    form.value.usuario = "";
+    form.value.password = "";
   }
 }
 
 // Función para registrar usuario
-function registrarUsuario() {
+async function registrarUsuario() {
+  // Validación de campos en el formulario de registro
   if (!formRegistro.value.usuario || !formRegistro.value.email || !formRegistro.value.password) {
-    error.value = "Todos los campos son obligatorios";
+    errorRegistro.value = "Todos los campos son obligatorios";
     return;
   }
 
+  // Crear el objeto con los datos que la API espera.
   const nuevoUsuario = {
-    usuario: formRegistro.value.usuario,
+    nombre: formRegistro.value.usuario,
     email: formRegistro.value.email,
-    password: formRegistro.value.password,
+    contraseña: formRegistro.value.password,
     rol: "usuario"
   };
 
-  // Guardar en localStorage el nuevo usuario
-  localStorage.setItem("nuevoUsuario", JSON.stringify(nuevoUsuario));
+  try {
+    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(nuevoUsuario)
+    });
+    
+    if (!response.ok) {
+      errorRegistro.value = "Error al registrar el usuario";
+      return;
+    }
+    
+    // De esta manera saltaría un alert en caso que se crease correctamente el usuario
+    //const result = await response.json();
+    //if(result) alert("Usuario Creado")
 
-  // Limpiar formulario y errores
-  formRegistro.value = { usuario: "", email: "", password: "" };
-  error.value = "";
-
-  //Se cierra el modal del registro y automáticamente se abre el modal del login
-  cerrarModalRegistro();
-  abrirModalLogin(); 
+    // Limpiar el formulario y el error de registro
+    formRegistro.value = { usuario: "", email: "", password: "" };
+    errorRegistro.value = "";
+    
+    // Cerrar el modal de registro y abrir el modal de login para que el usuario pueda iniciar sesión
+    cerrarModalRegistro();
+    abrirModalLogin();
+    
+  } catch (err) {
+    errorRegistro.value = "Error al registrar el usuario";
+  }
 }
 
 // Función para cerrar sesión
@@ -108,7 +137,7 @@ function cerrarSesion() {
   <header class="bg-light text-black align-items-center row">
     <div class="row">
       <h1 class="col-4">
-        <img src="@/images/logo.svg" alt="Logotipo" width="100px" height="100px" />
+        <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
         {{ title }}
       </h1>
 
@@ -164,7 +193,7 @@ function cerrarSesion() {
               <label class="form-label">Contraseña</label>
               <input type="password" v-model="form.password" class="form-control" placeholder="Ingrese su contraseña" />
             </div>
-            <p v-if="error" class="text-danger mt-2">{{ error }}</p>
+            <p v-if="errorLogin" class="text-danger mt-2">{{ errorLogin }}</p>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
@@ -201,7 +230,7 @@ function cerrarSesion() {
               <label class="form-label">Contraseña</label>
               <input type="password" v-model="formRegistro.password" class="form-control" placeholder="Ingrese una contraseña" />
             </div>
-            <p v-if="error" class="text-danger mt-2">{{ error }}</p>
+            <p v-if="errorRegistro" class="text-danger mt-2">{{ errorRegistro }}</p>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               <button type="submit" class="btn btn-success">Registrarse</button>
