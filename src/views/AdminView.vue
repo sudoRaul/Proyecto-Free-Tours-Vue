@@ -19,7 +19,7 @@ async function obtenerUsuarios() {
 // Función para actualizar el rol del usuario
 async function actualizarRol(usuarioId, nuevoRol) {
   try {
-    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios/", {
+    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios?id="+ usuarioId, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -39,9 +39,9 @@ obtenerUsuarios(); // Recargar usuarios para reflejar los cambios
 
 <template>
   <div>
-    <h2>Gestión de Usuarios</h2>
+    <h2 class="text-center mt-5 mb-4">Gestión de Usuarios</h2>
     <p v-if="error" class="text-danger">{{ error }}</p>
-    <table class="table table-striped">
+    <table class="table table-striped mb-5 mt-3">
       <thead>
         <tr>
           <th>ID</th>
@@ -50,7 +50,7 @@ obtenerUsuarios(); // Recargar usuarios para reflejar los cambios
         </tr>
       </thead>
       <tbody>
-        <tr v-for="usuario in usuarios" :key="usuario.id">
+        <tr  v-for="usuario in usuarios" :key="usuario.id" >
           <td>{{ usuario.id }}</td>
           <td>{{ usuario.nombre }}</td>
           <td>

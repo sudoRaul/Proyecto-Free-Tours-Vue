@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginViews.vue'
 import AdminView from '@/views/AdminView.vue'
 import CrearRuta from '@/views/CrearRuta.vue'
+import VerRutas from '@/views/VerRutas.vue'
 
 
 const router = createRouter({
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/crear-ruta',
       name: 'crear-ruta',
       component: CrearRuta
+    },
+    {
+      path: '/ver-rutas',
+      name: 'ver-rutas',
+      component: VerRutas
     }
   ],
 })

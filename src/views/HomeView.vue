@@ -182,7 +182,7 @@ const increaseSpeed = () => {
     object-fit: cover;
     height: 400px;
   }.imagenContenedor {
-    width: 350px;
+    width: 390px;
     height: 150px;
     border-radius: 50px;
     transition: transform 0.5s ease;

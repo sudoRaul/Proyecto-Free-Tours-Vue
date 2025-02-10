@@ -10,6 +10,7 @@ const formData = ref({
   hora: "",
   latitud: "",
   longitud: "",
+  guia: ""
 });
 
 const errorForm = ref();
@@ -41,7 +42,8 @@ async function enviarFormulario(){
         fecha: formData.value.fecha,
         hora: formData.value.hora,
         latitud: formData.value.latitud,
-        longitud: formData.value.longitud
+        longitud: formData.value.longitud,
+        guia_id: formData.value.guia
     }
 
     try{
@@ -57,8 +59,9 @@ async function enviarFormulario(){
       errorForm.value = "Error al enviar el formulario";
       return;
     }
+    //alert(response.status)
 
-    // Si el POST fue exitoso, limpiamos los campos del formulario
+    // Si el POST fue exitoso limpiamos los campos del formulario
     formData.value = {
       titulo: "",
       localidad: "",
@@ -68,6 +71,7 @@ async function enviarFormulario(){
       hora: "",
       latitud: "",
       longitud: "",
+      guia: ""
     };
 
     errorForm.value = ""; // Limpiar posibles errores previos
@@ -124,6 +128,10 @@ async function enviarFormulario(){
           <label class="form-label">Longitud</label>
           <input type="text" class="form-control" placeholder="Longitud del punto de encuentro" v-model="formData.longitud" required />
         </div>
+        <div class="mb-3">
+          <label class="form-label">Id del guía</label>
+          <input type="number" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
+        </div>
         <h5 v-if="errorForm">{{ errorForm }}</h5>
 
         <button type="submit" class="btn btn-primary w-100">Enviar</button>
@@ -134,7 +142,7 @@ async function enviarFormulario(){
 
 <style scoped>
 .card {
-  max-width: 500px;
+  max-width: 650px;
   margin: auto;
   border-radius: 10px;
 }
