@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginViews.vue'
 import AdminView from '@/views/AdminView.vue'
+import CrearRuta from '@/views/CrearRuta.vue'
 
 
 const router = createRouter({
@@ -20,6 +21,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: AdminView
     },
+    {
+      path: '/crear-ruta',
+      name: 'crear-ruta',
+      component: CrearRuta
+    }
   ],
 })
 
