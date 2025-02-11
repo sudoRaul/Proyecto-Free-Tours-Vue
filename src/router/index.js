@@ -4,6 +4,7 @@ import LoginView from '../views/LoginViews.vue'
 import AdminView from '@/views/AdminView.vue'
 import CrearRuta from '@/views/CrearRuta.vue'
 import VerRutas from '@/views/VerRutas.vue'
+import GuiaView from '@/views/GuiaView.vue'
 
 
 const router = createRouter({
@@ -31,7 +32,12 @@ const router = createRouter({
       path: '/ver-rutas',
       name: 'ver-rutas',
       component: VerRutas
-    }
+    },
+    {
+      path: '/visitas-pendientes',
+      name: 'visitas-pendientes',
+      component: GuiaView
+    },
   ],
 })
 

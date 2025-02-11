@@ -61,7 +61,8 @@ async function iniciarSesion() {
     if (usuarioEncontrado) {
       emit("sesionIniciada", {
         usuario: usuarioEncontrado.nombre,
-        rol: usuarioEncontrado.rol
+        rol: usuarioEncontrado.rol, 
+        id: usuarioEncontrado.id
       });
       
       errorLogin.value = "";

@@ -6,7 +6,7 @@ const listaRutas = ref([]);
 const error = ref(null);
 
 // Función para obtener las rutas desde la API
-const obtenerRutas = async () => {
+async function obtenerRutas() {
     try {
         const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
         if (!response.ok) throw new Error("Error al obtener las rutas");
