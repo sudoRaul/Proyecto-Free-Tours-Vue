@@ -6,7 +6,7 @@ import Footer from "./components/Footer.vue";
 
 const usuarioAutenticado = ref(null);
 
-// Cargar sesión almacenada
+// Carga la sesión almacenada
 onMounted(() => {
   const sesion = localStorage.getItem("sesion");
   if (sesion) {

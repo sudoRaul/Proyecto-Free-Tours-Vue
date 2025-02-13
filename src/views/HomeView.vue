@@ -102,17 +102,7 @@ const increaseSpeed = () => {
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                             <input type="date" class="form-control search-slt" placeholder="Enter Drop City">
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <select class="form-control search-slt" id="exampleFormControlSelect1">
-                                <option>Select Vehicle</option>
-                                <option>Example one</option>
-                                <option>Example one</option>
-                                <option>Example one</option>
-                                <option>Example one</option>
-                                <option>Example one</option>
-                                <option>Example one</option>
-                            </select>
-                        </div>
+                        
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                             <button type="button" class="btn btn-primary wrn-btn">Search</button>
                         </div>
@@ -254,6 +244,9 @@ const increaseSpeed = () => {
     text-transform: capitalize;
     height: calc(3rem + 2px) !important;
     border-radius:0;
+}
+form{
+  margin-left: 21%;
 }
   </style>
   

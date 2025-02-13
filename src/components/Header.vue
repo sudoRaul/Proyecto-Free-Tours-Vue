@@ -62,7 +62,8 @@ async function iniciarSesion() {
       emit("sesionIniciada", {
         usuario: usuarioEncontrado.nombre,
         rol: usuarioEncontrado.rol, 
-        id: usuarioEncontrado.id
+        id: usuarioEncontrado.id,
+        email: usuarioEncontrado.email
       });
       
       errorLogin.value = "";
@@ -149,6 +150,9 @@ function cerrarSesion() {
             <li class="nav-item">
               <a class="nav-link" @click.prevent="router.push('./')" href="#">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#reservar">Reservar Viaje</a>
+            </li>
             
             
             <!-- Opciones para Administrador -->
@@ -175,9 +179,7 @@ function cerrarSesion() {
               <a class="nav-link" @click.prevent="router.push('./valoraciones')" href="#">Valoraciones</a>
             </li>
 
-            <li class="nav-item">
-              <a v-if="!usuarioAutenticado" class="nav-link" href="#reservar">Reservar Viaje</a>
-            </li>
+            
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link" href="#topDestinos">Mejores destinos</a>
             </li>

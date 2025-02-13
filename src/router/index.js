@@ -5,6 +5,7 @@ import AdminView from '@/views/AdminView.vue'
 import CrearRuta from '@/views/CrearRuta.vue'
 import VerRutas from '@/views/VerRutas.vue'
 import GuiaView from '@/views/GuiaView.vue'
+import MisReservas from '@/views/MisReservas.vue'
 
 
 const router = createRouter({
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/visitas-pendientes',
       name: 'visitas-pendientes',
       component: GuiaView
+    },
+    {
+      path: '/mis-reservas',
+      name: 'mis-reservas',
+      component: MisReservas
     },
   ],
 })
