@@ -6,6 +6,7 @@ import CrearRuta from '@/views/CrearRuta.vue'
 import VerRutas from '@/views/VerRutas.vue'
 import GuiaView from '@/views/GuiaView.vue'
 import MisReservas from '@/views/MisReservas.vue'
+import Valoraciones from '@/views/Valoraciones.vue'
 
 
 const router = createRouter({
@@ -44,6 +45,11 @@ const router = createRouter({
       name: 'mis-reservas',
       component: MisReservas
     },
+    {
+      path: '/valoraciones',
+      name: 'valoraciones',
+      component: Valoraciones
+    }
   ],
 })
 
