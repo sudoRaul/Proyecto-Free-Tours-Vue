@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
-//Inicializamos los valores del formulario
+import Swal from "sweetalert2";
+
+// Inicializamos los valores del formulario de forma reactiva
 const formData = ref({
   titulo: "",
   localidad: "",
@@ -13,11 +15,9 @@ const formData = ref({
   guia: ""
 });
 
-const errorForm = ref();
-
 // Obtener la fecha de hoy en formato YYYY-MM-DD
 const fechaHoy = new Date().toISOString().split("T")[0];
-
+// Inicializamos las horas disponibles para mostrarlas en las opciones al crear ruta
 const horasDisponibles = ref([
   "10:00",
   "11:00",
@@ -32,36 +32,34 @@ const horasDisponibles = ref([
   "20:00",
 ]);
 
-async function enviarFormulario(){
-     
-    const nuevaRuta = {
-        titulo: formData.value.titulo,
-        localidad: formData.value.localidad,
-        descripcion: formData.value.descripcion,
-        foto: formData.value.foto,
-        fecha: formData.value.fecha,
-        hora: formData.value.hora,
-        latitud: formData.value.latitud,
-        longitud: formData.value.longitud,
-        guia_id: formData.value.guia
-    }
+async function enviarFormulario() {
+  // Obtenemos la información del formulario
+  const nuevaRuta = {
+    titulo: formData.value.titulo,
+    localidad: formData.value.localidad,
+    descripcion: formData.value.descripcion,
+    foto: formData.value.foto,
+    fecha: formData.value.fecha,
+    hora: formData.value.hora,
+    latitud: formData.value.latitud,
+    longitud: formData.value.longitud,
+    guia_id: formData.value.guia
+  };
 
-    try{
-        const response = await fetch("http://localhost/APIFreetours/api.php/rutas", {
+  try {
+    const response = await fetch("http://localhost/APIFreetours/api.php/rutas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(nuevaRuta)
     });
-    
-    if (!response.ok) {
-      errorForm.value = "Error al enviar el formulario";
-      return;
-    }
-    //alert(response.status)
 
-    // Si el POST fue exitoso limpiamos los campos del formulario
+    if (!response.ok) {
+      throw new Error("Error al enviar el formulario");
+    }
+
+    // Si se envía correctamente el formulario lo limpiamos
     formData.value = {
       titulo: "",
       localidad: "",
@@ -74,10 +72,13 @@ async function enviarFormulario(){
       guia: ""
     };
 
-    errorForm.value = ""; // Limpiar posibles errores previos
-    }catch(err){
-        errorForm = "No se ha podido enviar el formulario"
-    }
+    // Mostramos un mensaje de éxito
+    Swal.fire("¡Éxito!", "Ruta creada correctamente.", "success");
+
+  } catch (err) {
+    // Mostramos un mensaje de error
+    Swal.fire("Error", "No se pudo enviar el formulario.", "error");
+  }
 }
 </script>
 
@@ -132,7 +133,7 @@ async function enviarFormulario(){
           <label class="form-label">Id del guía</label>
           <input type="number" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
         </div>
-        <h5 v-if="errorForm">{{ errorForm }}</h5>
+        
 
         <button type="submit" class="btn btn-primary w-100">Enviar</button>
       </form>

@@ -139,7 +139,7 @@ function cerrarSesion() {
 <template>
   <header class="bg-light text-black align-items-center row">
     <div class="row">
-      <h1 class="col-3">
+      <h1 class="col-3" @click.prevent="router.push('./')">
         <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
         {{ title }}
       </h1>
@@ -270,3 +270,8 @@ function cerrarSesion() {
     </div>
   </div>
 </template>
+<style scoped>
+h1{
+  cursor: pointer;
+}
+</style>

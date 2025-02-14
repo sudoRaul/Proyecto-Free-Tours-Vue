@@ -1,18 +1,20 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import Swal from "sweetalert2";
 
-// Estado para almacenar la lista de rutas
+
+// Almacenamos la lista de rutas
 const listaRutas = ref([]);
 const error = ref(null);
 
-// Función para obtener las rutas desde la API
+// Función para obtener las rutas
 async function obtenerRutas() {
     try {
         const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
         if (!response.ok) throw new Error("Error al obtener las rutas");
         
         const data = await response.json();
-        listaRutas.value = data; // Guardamos las rutas en la variable reactiva
+        listaRutas.value = data; // Guardamos las rutas en la variable 
     } catch (err) {
         error.value = err.message;
     }
@@ -20,7 +22,19 @@ async function obtenerRutas() {
 
 // Función para eliminar una ruta
 async function eliminarRuta(id) {
-    if (!confirm("¿Estás seguro de que quieres eliminar esta ruta?")) return;
+    // Antes de eliminar lanzamos un prompt de confirmación
+    const result = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "No podrás revertir este proceso.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6"
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
         const response = await fetch(`http://localhost/APIFreetours/api.php/rutas?id=${id}`, {
@@ -28,16 +42,23 @@ async function eliminarRuta(id) {
         });
 
         if (!response.ok) throw new Error("Error al eliminar la ruta");
+        
+        //Llamamos a la función para actualizar los cambios
+        obtenerRutas()
 
-        // Tras eliminar mostramos las rutas
-        listaRutas.value = listaRutas.value.filter(ruta => ruta.id !== id);
+        // Mostramos mensaje de ruta eliminada correctamente
+        Swal.fire("¡Eliminado!", "La ruta ha sido eliminada correctamente.", "success");
     } catch (err) {
         error.value = err.message;
+
+        // Mostramos mensaje de error en caso de que no se elimine
+        Swal.fire("Error", "No se pudo eliminar la ruta.", "error");
     }
 };
 
-// Cargar rutas al montar el componente
-onMounted(obtenerRutas);
+// Cargamos las rutas al montar el componente
+obtenerRutas()
+//onMounted(obtenerRutas);
 </script>
 
 <template>

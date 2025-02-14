@@ -27,6 +27,14 @@ const volumeDown = () => {
   if (video.value.volume > 0) video.value.volume -= 0.1;
 };
 
+const increaseTime = () => {
+  video.value.currentTime += 5
+}
+
+const decreaseTime = () => {
+  video.value.currentTime -= 5
+}
+
 const mute = () => {
   video.value.muted = !video.value.muted;
   isMuted.value = video.value.muted;
@@ -159,6 +167,8 @@ const increaseSpeed = () => {
       <button @click="pausePlay">{{ isPlaying ? "⏸️" : "▶️" }}</button>
       <button @click="mute">{{ isMuted ? "🔇" : "🔊" }}</button>
       <button @click="increaseSpeed">⏩ x{{ speed }}</button>
+      <button @click="increaseTime">+5🕰️</button>
+      <button @click="decreaseTime">-5🕰️</button>
       <button @click="volumeUp">🔊</button>
       <button @click="volumeDown">🔉</button>
       <button @click="toggleFullscreen">{{ "🔳" }}</button>

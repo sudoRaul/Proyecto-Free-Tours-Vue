@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import Swal from "sweetalert2";
 
 const usuarios = ref([]);
-const error = ref("");
 const rolesDisponibles = ["admin", "guia", "cliente"];
 
-// Función para obtener los usuarios de la API
+// Obtenenemos los usuarios
 async function obtenerUsuarios() {
   try {
     const response = await fetch("http://localhost/APIFreetours/api.php/usuarios");
@@ -16,44 +16,92 @@ async function obtenerUsuarios() {
   }
 }
 
-// Función para actualizar el rol del usuario
+// Actualizamos el rol del usuario
 async function actualizarRol(usuarioId, nuevoRol) {
   try {
-    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios?id="+ usuarioId, {
+    const response = await fetch(`http://localhost/APIFreetours/api.php/usuarios?id=${usuarioId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ rol: nuevoRol }),
     });
+
     if (!response.ok) throw new Error("Error al actualizar el rol");
-    obtenerUsuarios(); // Recargar usuarios para reflejar cambios
+
+    // Mostramos un mensaje de éxito
+    Swal.fire({
+      icon: "success",
+      title: "Rol actualizado",
+      text: `El usuario ahora es ${nuevoRol}`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+    // Recargamos usuarios para mostrar los cambios
+    obtenerUsuarios();
   } catch (err) {
     error.value = err.message;
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.message,
+    });
   }
 }
 
+// Eliminamos un usuario 
 async function eliminarUsuario(usuarioId) {
-  try{
-    const response = await fetch("http://localhost/APIFreetours/api.php/usuarios?id="+ usuarioId,{
-      method: "DELETE",
-    });
+  //Preguntamos si está seguro de eliminar el usuario
+  const confirmacion = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción no se puede deshacer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
 
-    if (!response.ok) throw new Error("Error al eliminar el usuario");
-    obtenerUsuarios()
-  }catch (err) {
-        error.value = err.message;
+  if (confirmacion.isConfirmed) {
+    try {
+      const response = await fetch(`http://localhost/APIFreetours/api.php/usuarios?id=${usuarioId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Error al eliminar el usuario");
+
+      // Mostramos un mensaje de éxito
+      Swal.fire({
+        icon: "success",
+        title: "Usuario eliminado",
+        text: "El usuario ha sido eliminado correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      // Recargamos para actualizar los usuarios
+      obtenerUsuarios();
+    } catch (err) {
+      error.value = err.message;
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
     }
+  }
 }
-obtenerUsuarios(); // Recargar usuarios para reflejar los cambios
-// Cargar usuarios al montar el componente
+
+// Cargamos los usuarios al montar el componente
+obtenerUsuarios()
 //onMounted(obtenerUsuarios);
 </script>
 
 <template>
   <div>
     <h2 class="text-center mt-5 mb-4">Gestión de Usuarios</h2>
-    <p v-if="error" class="text-danger">{{ error }}</p>
     <table class="table table-striped mb-5 mt-3">
       <thead>
         <tr class="text-center">
@@ -64,31 +112,34 @@ obtenerUsuarios(); // Recargar usuarios para reflejar los cambios
         </tr>
       </thead>
       <tbody>
-        <tr class="text-center"  v-for="usuario in usuarios" :key="usuario.id" >
+        <tr class="text-center" v-for="usuario in usuarios" :key="usuario.id">
           <td>{{ usuario.id }}</td>
           <td>{{ usuario.nombre }}</td>
           <td>
-            <select v-model="usuario.rol" @change="actualizarRol(usuario.id, usuario.rol)" class="form-select">
+            <select v-model="usuario.rol" @change="actualizarRol(usuario.id, $event.target.value)" class="form-select">
               <option v-for="rol in rolesDisponibles" :key="rol" :value="rol">{{ rol }}</option>
             </select>
           </td>
-          <td><button class="btn-delete col-7 mt-1 p-2" @click="eliminarUsuario(usuario.id)">❌ Eliminar</button></td>
+          <td>
+            <button class="btn-delete col-7 mt-1 p-2" @click="eliminarUsuario(usuario.id)">❌ Eliminar</button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
 <style scoped>
 .btn-delete {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
 }
 
 .btn-delete:hover {
-    background-color: #cc0000;
+  background-color: #cc0000;
 }
 </style>
