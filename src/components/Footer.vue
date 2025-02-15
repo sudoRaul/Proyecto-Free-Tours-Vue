@@ -22,6 +22,7 @@
       src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
       <img style="height:22px;margin-left:3px;vertical-align:text-bottom;" 
       src="https://mirrors.creativecommons.org/presskit/icons/nd.svg?ref=chooser-v1" alt=""></a></p>
+      <img src="@/images/iconos/wcag2.2AAA.svg" alt="WCAG 2.2 Logos" width="90px" height="60px">
     </footer>
   </template>
   
