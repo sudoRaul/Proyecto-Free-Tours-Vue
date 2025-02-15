@@ -7,7 +7,8 @@ const isPlaying = ref(false);
 const isMuted = ref(false);
 const isFullscreen = ref(false);
 const speed = ref(1); // Velocidad inicial x1
-
+// Necesitaremos la fecha de hoy para que se introduzca una fecha a partir de esta
+const fechaHoy = new Date().toISOString().split("T")[0];
 
 const pausePlay = () => {
   if (video.value.paused) {
@@ -108,11 +109,11 @@ const increaseSpeed = () => {
                             <input type="text" class="form-control search-slt" placeholder="Introduzca la ciudad" required>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <input type="date" class="form-control search-slt" placeholder="Enter Drop City">
+                            <input type="date" :min="fechaHoy" class="form-control search-slt" placeholder="Enter Drop City">
                         </div>
                         
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" class="btn btn-primary wrn-btn">Search</button>
+                            <button type="button" aria-label="Buscar ruta" class="btn btn-primary wrn-btn">Buscar ruta</button>
                         </div>
                     </div>
                 </div>
@@ -145,14 +146,14 @@ const increaseSpeed = () => {
     <div id="topDestinos">
       <h2 class="text-center fw-bold mb-4">Mejores destinos</h2>
       <div class="row justify-content-around mb-5">
-        <img src="@/images/contenido/madrid.jpg" alt="Foto Madrid" title="Madrid" class="imagenContenedor col-3 mb-4">
-        <img src="@/images/contenido/canada.jpg" alt="Foto Canada" title="Canadá" class="imagenContenedor col-3">
-        <img src="@/images/contenido/paris.jpg" alt="Foto Paris" title="París" class="imagenContenedor col-3">
-        <img src="@/images/contenido/japon.jpg" alt="Foto Japon" title="Japón" class="imagenContenedor col-3">
-        <img src="@/images/contenido/australia.jpg" alt="Foto Australia" title="Australia" class="imagenContenedor col-3">
-        <img src="@/images/contenido/roma.jpg" alt="Foto Roma" title="Roma" class="imagenContenedor col-3">
-        <img src="@/images/contenido/sf.jpg" alt="Foto San Francisco" title="San Francisco" class="imagenContenedor col-3">
-        <img src="@/images/contenido/londres.jpg" alt="Foto Londres" title="Londres" class="imagenContenedor col-3">
+        <img src="@/images/contenido/madrid.jpg" alt="Foto Madrid" aria-hidden="true" title="Madrid" class="imagenContenedor col-3 mb-4">
+        <img src="@/images/contenido/canada.jpg" alt="Foto Canada" aria-hidden="true" title="Canadá" class="imagenContenedor col-3">
+        <img src="@/images/contenido/paris.jpg" alt="Foto Paris" aria-hidden="true" title="París" class="imagenContenedor col-3">
+        <img src="@/images/contenido/japon.jpg" alt="Foto Japon" aria-hidden="true" title="Japón" class="imagenContenedor col-3">
+        <img src="@/images/contenido/australia.jpg" alt="Foto Australia" aria-hidden="true" title="Australia" class="imagenContenedor col-3">
+        <img src="@/images/contenido/roma.jpg" alt="Foto Roma" aria-hidden="true" title="Roma" class="imagenContenedor col-3">
+        <img src="@/images/contenido/sf.jpg" alt="Foto San Francisco" aria-hidden="true" title="San Francisco" class="imagenContenedor col-3">
+        <img src="@/images/contenido/londres.jpg" alt="Foto Londres" aria-hidden="true" title="Londres" class="imagenContenedor col-3">
       </div>
     </div>
     <div class="mb-5">
@@ -164,14 +165,14 @@ const increaseSpeed = () => {
     </video>
 
     <div class="controls" v-show="showControls">
-      <button @click="pausePlay">{{ isPlaying ? "⏸️" : "▶️" }}</button>
-      <button @click="mute">{{ isMuted ? "🔇" : "🔊" }}</button>
-      <button @click="increaseSpeed">⏩ x{{ speed }}</button>
-      <button @click="increaseTime">+5🕰️</button>
-      <button @click="decreaseTime">-5🕰️</button>
-      <button @click="volumeUp">🔊</button>
-      <button @click="volumeDown">🔉</button>
-      <button @click="toggleFullscreen">{{ "🔳" }}</button>
+      <button aria-label="Iniciar/Pausar vídeo" @click="pausePlay">{{ isPlaying ? "⏸️" : "▶️" }}</button>
+      <button aria-label="Activar/Desactivar sonido" @click="mute">{{ isMuted ? "🔇" : "🔊" }}</button>
+      <button aria-label="Aumentar velocidad" @click="increaseSpeed">⏩ x{{ speed }}</button>
+      <button aria-label="Aumentar 5 segundos" @click="increaseTime">+5🕰️</button>
+      <button aria-label="Decrementar 5 segundos" @click="decreaseTime">-5🕰️</button>
+      <button aria-label="Subir volumen" @click="volumeUp">🔊</button>
+      <button aria-label="Bajar volumen" @click="volumeDown">🔉</button>
+      <button aria-label="Pantalla grande" @click="toggleFullscreen">{{ "🔳" }}</button>
     </div>
   </div>
     </div>

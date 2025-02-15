@@ -105,23 +105,23 @@ obtenerUsuarios()
     <table class="table table-striped mb-5 mt-3">
       <thead>
         <tr class="text-center">
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Rol</th>
-          <th>Eliminar Usuario</th>
+          <th id="id" scope="col">ID</th>
+          <th id="name" scope="col">Nombre</th>
+          <th id="rol" scope="col">Rol</th>
+          <th id="eliminar" scope="col">Eliminar Usuario</th>
         </tr>
       </thead>
       <tbody>
         <tr class="text-center" v-for="usuario in usuarios" :key="usuario.id">
-          <td>{{ usuario.id }}</td>
-          <td>{{ usuario.nombre }}</td>
-          <td>
+          <td headers="id">{{ usuario.id }}</td>
+          <td headers="name">{{ usuario.nombre }}</td>
+          <td headers="rol">
             <select v-model="usuario.rol" @change="actualizarRol(usuario.id, $event.target.value)" class="form-select">
               <option v-for="rol in rolesDisponibles" :key="rol" :value="rol">{{ rol }}</option>
             </select>
           </td>
-          <td>
-            <button class="btn-delete col-7 mt-1 p-2" @click="eliminarUsuario(usuario.id)">❌ Eliminar</button>
+          <td headers="eliminar">
+            <button class="btn-delete col-7 mt-1 p-2" aria-label="Eliminar usuario" @click="eliminarUsuario(usuario.id)">❌ Eliminar usuario</button>
           </td>
         </tr>
       </tbody>

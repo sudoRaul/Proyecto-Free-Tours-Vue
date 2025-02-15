@@ -122,35 +122,35 @@ async function enviarFormulario() {
       <h2 class="mb-3 text-center">Formulario de Tour</h2>
       <form @submit.prevent="enviarFormulario">
         <div class="mb-3">
-          <label class="form-label">Título</label>
-          <input type="text" class="form-control" placeholder="Título de la ruta" v-model="formData.titulo" required />
+          <label for="titulo" class="form-label">Título</label>
+          <input type="text" id="titulo" class="form-control" placeholder="Título de la ruta" v-model="formData.titulo" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Localidad</label>
-          <input type="text" class="form-control" placeholder="Municipio de la ruta" v-model="formData.localidad"
+          <label class="form-label" for="localidad">Localidad</label>
+          <input type="text" id="localidad" class="form-control" placeholder="Municipio de la ruta" v-model="formData.localidad"
             required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Descripción</label>
-          <textarea class="form-control" placeholder="Descripción de la ruta" rows="3"
+          <label class="form-label" for="description">Descripción</label>
+          <textarea class="form-control" id="description" placeholder="Descripción de la ruta" rows="3"
             v-model="formData.descripcion"></textarea>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Foto</label>
-          <input type="text" class="form-control" placeholder="URL de la imagen" v-model="formData.foto" required />
+          <label class="form-label" for="foto">Foto</label>
+          <input type="text" id="foto" class="form-control" placeholder="URL de la imagen" v-model="formData.foto" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Fecha</label>
-          <input type="date" :min="fechaHoy" class="form-control" v-model="formData.fecha" required />
+          <label class="form-label" for="fecha">Fecha</label>
+          <input type="date" id="fecha" :min="fechaHoy" class="form-control" v-model="formData.fecha" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Hora</label>
-          <select class="form-select" v-model="formData.hora" required>
+          <label class="form-label" for="hora">Hora</label>
+          <select class="form-select" id="hora" v-model="formData.hora" required>
             <option value="" disabled>Seleccione una hora</option>
             <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
           </select>
@@ -166,19 +166,19 @@ async function enviarFormulario() {
           <input type="text" class="form-control" placeholder="Longitud del punto de encuentro" v-model="formData.longitud" required />
         </div>-->
         <div class="mb-3">
-          <label class="form-label">Id del guía</label>
-          <input type="number" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
+          <label class="form-label" for="idGuia">Id del guía</label>
+          <input type="number" id="idGuia" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
         </div> 
 
         <div class="mb-4">
-          <label class="form-label">Punto de encuentro</label>
-          <input v-model="address" placeholder="Ubicación de encuentro" class="form-control" />
-          <input type="button" @click.prevent="searchLocation" value="Buscar Ubicación" class="mb-3 mt-3 btn btn-info">
+          <label class="form-label" for="punto">Punto de encuentro</label>
+          <input v-model="address" id="punto" placeholder="Ubicación de encuentro" class="form-control" />
+          <input type="button" aria-level="Buscar ubicación" @click.prevent="searchLocation" value="Buscar Ubicación" class="mb-3 mt-3 btn btn-info">
           <div id="map" style="height: 200px;"></div>
         </div>
 
 
-        <button type="submit" class="btn btn-primary w-100">Enviar</button>
+        <button type="submit" aria-label="Envío formulario ruta" class="btn btn-primary w-100">Enviar formulario de ruta</button>
       </form>
     </div>
   </div>
