@@ -99,7 +99,7 @@ const increaseSpeed = () => {
     </div>
 
     <div class="mt-5">
-      <h2 class="text-center fw-bold mb-3" id="reservar" >Planificamos tu próxima aventura</h2>
+      <h2 class="text-center fw-bold mb-3" id="reservar"> <img src="@/images/iconos/search.png" alt="Icono de búsqueda" title="Buscar ruta"> Planificamos tu próxima aventura</h2>
       <div class="container text-center">
         <form>
             <div class="row">
