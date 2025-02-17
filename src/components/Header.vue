@@ -148,7 +148,7 @@ function cerrarSesion() {
         <div class="collapse navbar-collapse align-items-center justify-content-center">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./')" href="#">Home</a>
+              <a class="nav-link" @click.prevent="router.push('/')" href="#">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#reservar">Reservar Viaje</a>
@@ -157,26 +157,26 @@ function cerrarSesion() {
             
             <!-- Opciones para Administrador -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./admin')" href="#">Lista de usuarios</a>
+              <a class="nav-link" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./crear-ruta')" href="#">Crear ruta</a>
+              <a class="nav-link" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./ver-rutas')" href="#">Ver todas las rutas</a>
+              <a class="nav-link" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
             </li>
 
             <!-- Opciones para Guía -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'guia'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./visitas-pendientes')" href="#">Visitas pendientes</a>
+              <a class="nav-link" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
             </li>
 
             <!-- Opciones para Cliente -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./mis-reservas')" href="#">Mis reservas</a>
+              <a class="nav-link" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('./valoraciones')" href="#">Valoraciones</a>
+              <a class="nav-link" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
             </li>
 
             

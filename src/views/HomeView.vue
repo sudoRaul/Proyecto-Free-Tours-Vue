@@ -1,5 +1,12 @@
 <script setup>
  import { ref } from "vue";
+ import router from "../router";
+
+
+const localidad = ref("");
+const fecha = ref("")
+const listaRutas = ref([]);
+
 
 const video = ref(null);
 const showControls = ref(false);
@@ -59,6 +66,19 @@ const increaseSpeed = () => {
   }
 };
 
+async function obtenerRutas() {
+    try {
+        const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
+        if (!response.ok) throw new Error("Error al obtener las rutas");
+        
+        const data = await response.json();
+        listaRutas.value = data; // Guardamos las rutas en la variable 
+    } catch (err) {
+        error.value = err.message;
+    }
+};
+obtenerRutas()
+
 
 </script>
 <template>
@@ -106,14 +126,17 @@ const increaseSpeed = () => {
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <input type="text" class="form-control search-slt" placeholder="Introduzca la ciudad" required>
+                          <select class="form-control search-slt" name="localidad" id="localidad" v-model="localidad">
+                            <option value="" disabled>Seleccione una ciudad</option>
+                            <option v-for="localidad in listaRutas" :key="localidad.localidad" :value="localidad.localidad">{{ localidad.localidad }}</option>
+                          </select>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <input type="date" :min="fechaHoy" class="form-control search-slt" placeholder="Enter Drop City">
+                            <input type="date" :min="fechaHoy" v-model="fecha" class="form-control search-slt" placeholder="Enter Drop City" aria-required="true" required>
                         </div>
                         
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" aria-label="Buscar ruta" class="btn btn-primary wrn-btn">Buscar ruta</button>
+                            <button type="button" aria-label="Buscar ruta" @click.prevent="router.push(`/rutas-filtradas/${fecha}/${localidad}`)" class="btn btn-primary wrn-btn">Buscar ruta</button>
                         </div>
                     </div>
                 </div>

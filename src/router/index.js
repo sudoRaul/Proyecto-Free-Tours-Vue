@@ -7,6 +7,8 @@ import VerRutas from '@/views/VerRutas.vue'
 import GuiaView from '@/views/GuiaView.vue'
 import MisReservas from '@/views/MisReservas.vue'
 import Valoraciones from '@/views/Valoraciones.vue'
+import VerRutasFiltradas from '@/views/VerRutasFiltradas.vue'
+import InfoCompletaRuta from '@/views/InfoCompletaRuta.vue'
 
 
 const router = createRouter({
@@ -49,6 +51,16 @@ const router = createRouter({
       path: '/valoraciones',
       name: 'valoraciones',
       component: Valoraciones
+    },
+    {
+      path: '/rutas-filtradas/:fecha/:localidad',
+      name: 'rutas-filtradas',
+      component: VerRutasFiltradas
+    },
+    {
+      path: '/info-completa-ruta/:id',
+      name: 'info-completa-ruta',
+      component: InfoCompletaRuta
     }
   ],
 })
