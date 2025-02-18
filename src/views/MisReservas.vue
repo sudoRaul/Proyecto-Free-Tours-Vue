@@ -88,8 +88,10 @@ async function eliminarRuta(rutaId) {
 }
 
 // Llamamos a la función para mostrar las rutas al cargar el componente
-obtenerRutas()
-//onMounted(obtenerRutas);
+//obtenerRutas()
+onMounted(function(){
+  obtenerRutas()
+});
 </script>
 
 <template>

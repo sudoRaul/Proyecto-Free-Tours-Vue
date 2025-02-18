@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import L from "leaflet";
@@ -7,59 +7,51 @@ import "leaflet/dist/leaflet.css";
 
 const route = useRoute();
 const idRuta = ref(route.params.id);
-const listaRutas = ref([]);
+const infoRuta = ref([]);
+let map;
 
 
+//Obtenemos la información de la ruta
+function obtenerInfo(){
+    
+        fetch(`http://localhost/APIFreetours/api.php/rutas?id=${idRuta.value}`)
+        .then(response => response.json())
+        .then(function (data) {
+            infoRuta.value = data;
+            inicializarMapas();
+        })
+        .catch(error => console.error('Error:', error));
 
-async function obtenerInfo(){
-    try{
-        const response = await fetch(`http://localhost/APIFreetours/api.php/rutas?id=${idRuta.value}`)
-        if (!response.ok) throw new Error("Error al obtener las rutas");
-        
-        const data = await response.json();
-        listaRutas.value = data; // Guardamos la información de la ruta
-
-        
-    } catch (err) {
-        err.message;
-    }
+   
 }
 
-// Inicializamos los mapas en cada ruta
-function inicializarMapas() {
+// Inicializamos el mapa
+ function inicializarMapas() {
   
-    const mapId = `map-${listaRutas.value.id}`;
-
-    const map = L.map(mapId).setView([listaRutas.value.latitud, listaRutas.value.longitud], 13);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(map);
-
-    // Agregar marcador con popup
-    L.marker([listaRutas.value.latitud, listaRutas.value.longitud])
-      .addTo(map)
-      .bindPopup(`<b>${listaRutas.value.ruta_titulo}</b><br>${listaRutas.value.ruta_localidad}`)
+    map = L.map('map').setView([parseFloat(infoRuta.value.latitud), parseFloat(infoRuta.value.longitud)], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  L.marker([infoRuta.value.latitud, infoRuta.value.longitud]).addTo(map)
       .openPopup();
+    map.setView([infoRuta.value.latitud, infoRuta.value.longitud], 13);
   
 }
-
 onMounted(function(){
-    obtenerInfo()
-    inicializarMapas()
-})
+    obtenerInfo();
+});
 </script>
 <template>
-    <h1 class="text-center mt-4">{{listaRutas.titulo}}</h1>
+    <h1 class="text-center mt-4">{{infoRuta.titulo}}</h1>
     <div class="row">
-        <img :src="listaRutas.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded col-3 ms-5">
+        <img :src="infoRuta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded col-3 ms-5">
                 
                 <div class="col-7 row">
-                    <p class="text-gray-700 font-semibold col-12 fs-5">📅 {{ listaRutas.fecha }}</p>
-                    <p class="text-gray-500 col-12 fs-5">📍 {{ listaRutas.localidad }}</p>
-                    <p class="text-gray-500 col-12 fs-5">⌚ {{ listaRutas.fecha }}</p>
+                    <p class="text-gray-700 font-semibold col-12 fs-5">📅 {{ infoRuta.fecha }}</p>
+                    <p class="text-gray-500 col-12 fs-5">📍 {{ infoRuta.localidad }}</p>
+                    <p class="text-gray-500 col-12 fs-5">⌚ {{ infoRuta.fecha }}</p>
                 </div>
-                <div :id="'map-' + listaRutas.id" class="map-container"></div>
+                <div id="map" class="map-container"></div>
 
     </div>
 </template>
