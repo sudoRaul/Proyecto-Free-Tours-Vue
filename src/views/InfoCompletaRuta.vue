@@ -37,29 +37,51 @@ function obtenerInfo(){
     map.setView([infoRuta.value.latitud, infoRuta.value.longitud], 13);
   
 }
+
 onMounted(function(){
     obtenerInfo();
 });
 </script>
 <template>
-    <h1 class="text-center mt-4">{{infoRuta.titulo}}</h1>
-    <div class="row">
-        <img :src="infoRuta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded col-3 ms-5">
-                
-                <div class="col-7 row">
-                    <p class="text-gray-700 font-semibold col-12 fs-5">📅 {{ infoRuta.fecha }}</p>
-                    <p class="text-gray-500 col-12 fs-5">📍 {{ infoRuta.localidad }}</p>
-                    <p class="text-gray-500 col-12 fs-5">⌚ {{ infoRuta.fecha }}</p>
-                </div>
-                <div id="map" class="map-container"></div>
-
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">{{ infoRuta.titulo }}</h1>
+  
+      <div class="row">
+        <div class="col-lg-4 text-center mt-4">
+          <img :src="infoRuta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded img-fluid shadow-lg">
+        </div>
+  
+        <div class="col-lg-6 d-flex flex-column justify-content-center">
+          <p class="fs-5"><strong>📅 Fecha:</strong> {{ infoRuta.fecha }}</p>
+          <p class="fs-5"><strong>📍 Localidad:</strong> {{ infoRuta.localidad }}</p>
+          <p class="fs-5"><strong>⌚ Horario:</strong> {{ infoRuta.hora }}</p>
+          <button class="btn btn-primary">Reservar ruta</button>
+        </div>
+        
+        
+      </div>
+      <div class="col-lg-12 mb-5">
+        <br>
+            <h3 class="text-center">📌 <strong>Punto de encuentro:</strong> {{ infoRuta.longitud }} - {{ infoRuta.latitud }}</h3>
+          <div id="map" class="map-container mb-5 shadow"></div>
+        </div>
     </div>
-</template>
-<style scoped>
-.map-container {
-  height: 300px;
-  width: 100%;
-  border-radius: 10px;
-  margin-top: 20px;
-}
-</style>
+  </template>
+  
+  <style scoped>
+  h3:hover{
+    color: blue;
+  }button{
+    width: 40%;
+  }
+  .container{
+    border: 4px dashed rgb(195, 255, 235)
+  }
+  .map-container {
+    height: 290px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  </style>
+  

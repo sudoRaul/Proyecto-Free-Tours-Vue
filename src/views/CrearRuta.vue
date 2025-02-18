@@ -4,7 +4,8 @@ import Swal from "sweetalert2";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-
+//Inicializamos la lista de los guias
+const listaGuias = ref([])
 // Inicializamos los valores del formulario de forma reactiva
 const formData = ref({
   titulo: "",
@@ -66,6 +67,18 @@ const horasDisponibles = ref([
   "20:00",
 ]);
 
+async function filtrarGuias() {
+  try{
+    
+    const response = await fetch(`http://localhost/APIFreetours/api.php/asignaciones?fecha=${formData.value.fecha}`)
+    const data = await response.json();
+    listaGuias.value = data;
+    console.log(listaGuias.value)
+  }catch(err){
+    err.message
+  }
+}
+
 async function enviarFormulario() {
   // Obtenemos la información del formulario
   const nuevaRuta = {
@@ -122,34 +135,34 @@ async function enviarFormulario() {
       <h2 class="mb-3 text-center">Formulario de Tour</h2>
       <form @submit.prevent="enviarFormulario">
         <div class="mb-3">
-          <label for="titulo" class="form-label">Título</label>
-          <input type="text" id="titulo" class="form-control" placeholder="Título de la ruta" v-model="formData.titulo" required />
+          <label for="titulo" class="form-label">Título *</label>
+          <input aria-required="true" type="text" id="titulo" class="form-control" placeholder="Ej: Mar de olivos" v-model="formData.titulo" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="localidad">Localidad</label>
-          <input type="text" id="localidad" class="form-control" placeholder="Municipio de la ruta" v-model="formData.localidad"
+          <label class="form-label" for="localidad">Localidad *</label>
+          <input aria-required="true" type="text" id="localidad" class="form-control" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"
             required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="description">Descripción</label>
-          <textarea class="form-control" id="description" placeholder="Descripción de la ruta" rows="3"
+          <label class="form-label" for="description">Descripción *</label>
+          <textarea class="form-control" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" rows="3"
             v-model="formData.descripcion"></textarea>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="foto">Foto</label>
-          <input type="text" id="foto" class="form-control" placeholder="URL de la imagen" v-model="formData.foto" required />
+          <label class="form-label" for="foto">Foto *</label>
+          <input type="text" aria-required="true" id="foto" class="form-control" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="fecha">Fecha</label>
-          <input type="date" id="fecha" :min="fechaHoy" class="form-control" v-model="formData.fecha" required />
+          <label class="form-label" for="fecha">Fecha *</label>
+          <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control" v-model="formData.fecha" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="hora">Hora</label>
+          <label class="form-label" for="hora">Hora *</label>
           <select class="form-select" id="hora" v-model="formData.hora" required>
             <option value="" disabled>Seleccione una hora</option>
             <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
@@ -164,15 +177,22 @@ async function enviarFormulario() {
         <div class="mb-3">
           <label class="form-label">Longitud</label>
           <input type="text" class="form-control" placeholder="Longitud del punto de encuentro" v-model="formData.longitud" required />
-        </div>-->
+        </div>
         <div class="mb-3">
           <label class="form-label" for="idGuia">Id del guía</label>
-          <input type="number" id="idGuia" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
+          <input @click.prevent="filtrarGuias" type="number" id="idGuia" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
+        </div> -->
+        <div class="mb-3">
+          <label class="form-label" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
+          <select id="guia" class="form-control" v-model="formData.guia" required>
+            <option value="" disabled>Seleccione el id del guia</option>
+            <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
+          </select>
         </div> 
 
         <div class="mb-4">
-          <label class="form-label" for="punto">Punto de encuentro</label>
-          <input v-model="address" id="punto" placeholder="Ubicación de encuentro" class="form-control" />
+          <label class="form-label" for="punto">Punto de encuentro *</label>
+          <input v-model="address" aria-required="true" id="punto" placeholder="Ej: Calle Fuentebuena, 23" class="form-control" />
           <input type="button" aria-level="Buscar ubicación" @click.prevent="searchLocation" value="Buscar Ubicación" class="mb-3 mt-3 btn btn-info">
           <div id="map" style="height: 200px;"></div>
         </div>

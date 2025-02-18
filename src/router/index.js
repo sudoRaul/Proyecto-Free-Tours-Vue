@@ -53,7 +53,7 @@ const router = createRouter({
       component: Valoraciones
     },
     {
-      path: '/rutas-filtradas/:fecha/:localidad',
+      path: '/rutas-filtradas/:fecha/:localidad?',
       name: 'rutas-filtradas',
       component: VerRutasFiltradas
     },

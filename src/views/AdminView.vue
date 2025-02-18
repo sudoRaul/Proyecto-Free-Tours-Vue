@@ -105,10 +105,10 @@ obtenerUsuarios()
     <table class="table table-striped mb-5 mt-3">
       <thead>
         <tr class="text-center">
-          <th id="id" scope="col">ID</th>
-          <th id="name" scope="col">Nombre</th>
-          <th id="rol" scope="col">Rol</th>
-          <th id="eliminar" scope="col">Eliminar Usuario</th>
+          <th scope:col id="id" scope="col">ID</th>
+          <th scope:col id="name" scope="col">Nombre</th>
+          <th scope:col id="rol" scope="col">Rol</th>
+          <th scope:col id="eliminar" scope="col">Eliminar Usuario</th>
         </tr>
       </thead>
       <tbody>

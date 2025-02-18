@@ -1,6 +1,8 @@
 <script setup>
  import { ref } from "vue";
  import router from "../router";
+ import Swal from "sweetalert2";
+
 
 
 const localidad = ref("");
@@ -13,7 +15,7 @@ const showControls = ref(false);
 const isPlaying = ref(false);
 const isMuted = ref(false);
 const isFullscreen = ref(false);
-const speed = ref(1); // Velocidad inicial x1
+const speed = ref(1); // Inicializamos la velocidad a 1
 // Necesitaremos la fecha de hoy para que se introduzca una fecha a partir de esta
 const fechaHoy = new Date().toISOString().split("T")[0];
 
@@ -79,6 +81,17 @@ async function obtenerRutas() {
 };
 obtenerRutas()
 
+const validarFormulario = () => {
+  if (!fecha.value) {
+    Swal.fire({
+      icon: "warning",
+      title: "Atención",
+      text: "Por favor, seleccione una fecha antes de buscar."
+    });
+    return;
+  }
+  router.push(`/rutas-filtradas/${fecha.value}/${localidad.value}`);
+};
 
 </script>
 <template>
@@ -132,11 +145,11 @@ obtenerRutas()
                           </select>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <input type="date" :min="fechaHoy" v-model="fecha" class="form-control search-slt" placeholder="Enter Drop City" aria-required="true" required>
+                            <input type="date" :min="fechaHoy" v-model="fecha" class="form-control search-slt" required>
                         </div>
                         
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" aria-label="Buscar ruta" @click.prevent="router.push(`/rutas-filtradas/${fecha}/${localidad}`)" class="btn btn-primary wrn-btn">Buscar ruta</button>
+                            <button type="button" aria-label="Buscar ruta" @click.prevent="validarFormulario" class="btn btn-primary wrn-btn">Buscar ruta</button>
                         </div>
                     </div>
                 </div>
