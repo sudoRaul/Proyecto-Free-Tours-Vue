@@ -69,13 +69,23 @@ const horasDisponibles = ref([
 
 async function filtrarGuias() {
   try{
-    
     const response = await fetch(`http://localhost/APIFreetours/api.php/asignaciones?fecha=${formData.value.fecha}`)
     const data = await response.json();
     listaGuias.value = data;
     console.log(listaGuias.value)
   }catch(err){
     err.message
+  }
+}
+
+function comprobarGuias() {
+  if(!formData.value.fecha){
+    Swal.fire({
+      icon: "warning",
+      title: "Atención",
+      text: "Por favor, seleccione una fecha antes de buscar."
+    });
+    return;
   }
 }
 
@@ -184,7 +194,7 @@ async function enviarFormulario() {
         </div> -->
         <div class="mb-3">
           <label class="form-label" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
-          <select id="guia" class="form-control" v-model="formData.guia" required>
+          <select id="guia" class="form-control" @click="comprobarGuias" v-model="formData.guia" required>
             <option value="" disabled>Seleccione el id del guia</option>
             <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
           </select>

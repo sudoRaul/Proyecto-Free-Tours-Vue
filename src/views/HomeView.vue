@@ -2,7 +2,7 @@
  import { ref } from "vue";
  import router from "../router";
  import Swal from "sweetalert2";
-
+  
 
 
 const localidad = ref("");

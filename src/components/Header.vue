@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import router from "../router";
+import { useRouter } from "vue-router";
 import { Modal } from "bootstrap";
 
-
+//Necesitamos el router para redirigir al home cuando se inicie o se cierre la sesión
+const router2 = useRouter()
 const emit = defineEmits(["sesionIniciada", "sesionCerrada"]);
 
 const props = defineProps({
@@ -68,6 +70,7 @@ async function iniciarSesion() {
       
       errorLogin.value = "";
       cerrarModalLogin();
+      router2.push("/")
     } else {
       errorLogin.value = "Usuario o contraseña incorrectos";
       // Limpiar el formulario de login tras un intento fallido
@@ -113,6 +116,7 @@ async function registrarUsuario() {
     
     // De esta manera saltaría un alert en caso que se crease correctamente el usuario
     //const result = await response.json();
+    //Swal.fire("¡Usuario registrado!", "Inicie sesión para comenzar la aventura", "success");
     //if(result) alert("Usuario Creado")
 
     // Limpiar el formulario y el error de registro
@@ -132,7 +136,7 @@ async function registrarUsuario() {
 function cerrarSesion() {
   emit("sesionCerrada", null);
   localStorage.removeItem("sesion");
-  router.push("./")
+  router2.push("/")
 }
 </script>
 

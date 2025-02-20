@@ -2,6 +2,8 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
+import NoData from "@/components/NoData.vue";
+
 
 const route = useRoute();
 const localidad = ref(route.params.localidad || ""); // Si no hay localidad, será una cadena vacía
@@ -36,7 +38,7 @@ obtenerRutasFiltradas()
 </script>
 
 <template>
-    <div class="container">
+    <div v-if="listaRutas.length > 0" class="container">
         <h1 class="text-center my-4">Rutas {{ localidad ? `en ${localidad}` : "" }} para la fecha {{ fecha }}</h1>
 
         <p v-if="listaRutas.length === 0" class="text-muted text-center">No hay rutas disponibles.</p>
@@ -60,6 +62,8 @@ obtenerRutasFiltradas()
             </router-link>
         </div>
     </div>
+    <NoData v-else mensaje="No se encontraron rutas" submensaje="Pruebe en otra fecha o vuelva en otro momento." />
+
 </template>
 
 <style scoped>
