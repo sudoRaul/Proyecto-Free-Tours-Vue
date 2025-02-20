@@ -3,6 +3,8 @@ import { ref, onMounted, nextTick } from "vue";
 import Swal from "sweetalert2";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import NoData from "@/components/NoData.vue";
+
 
 const listaRutas = ref([]);
 const error = ref("");
@@ -95,7 +97,7 @@ onMounted(function(){
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="listaRutas.length > 0" class="container">
     <h1 class="text-center mb-4 mt-4">Mis Reservas</h1>
 
     <p v-if="error" class="text-red-500">{{ error }}</p>
@@ -118,6 +120,8 @@ onMounted(function(){
       </div>
     </div>
   </div>
+  <NoData v-else mensaje="No se encontraron rutas" submensaje="Reserve alguna ruta para previsualizarlas en este apartado." />
+
 </template>
 
 <style scoped>

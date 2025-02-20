@@ -41,9 +41,8 @@ obtenerRutasFiltradas()
     <div v-if="listaRutas.length > 0" class="container">
         <h1 class="text-center my-4">Rutas {{ localidad ? `en ${localidad}` : "" }} para la fecha {{ fecha }}</h1>
 
-        <p v-if="listaRutas.length === 0" class="text-muted text-center">No hay rutas disponibles.</p>
 
-        <div v-else class="tarjetas d-flex flex-column align-items-center w-100">
+        <div class="tarjetas d-flex flex-column align-items-center w-100">
             <router-link 
                 v-for="ruta in listaRutas" 
                 :key="ruta.id" 

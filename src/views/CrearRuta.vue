@@ -88,9 +88,24 @@ function comprobarGuias() {
     return;
   }
 }
-
+// Enviamos el fomrulario
 async function enviarFormulario() {
-  // Obtenemos la información del formulario
+  // Validamos que los campos no estén vacíos
+  if (
+    !formData.value.titulo ||
+    !formData.value.localidad ||
+    !formData.value.descripcion ||
+    !formData.value.foto ||
+    !formData.value.fecha ||
+    !formData.value.hora ||
+    !formData.value.latitud ||
+    !formData.value.longitud ||
+    !formData.value.guia
+  ) {
+    Swal.fire("Campos obligatorios", "Todos los campos son requeridos.", "warning");
+    return;
+  }
+
   const nuevaRuta = {
     titulo: formData.value.titulo,
     localidad: formData.value.localidad,
@@ -116,7 +131,13 @@ async function enviarFormulario() {
       throw new Error("Error al enviar el formulario");
     }
 
-    // Si se envía correctamente el formulario lo limpiamos
+    Swal.fire("¡Éxito!", "Ruta creada correctamente.", "success");
+
+  } catch (err) {
+    Swal.fire("Error", "No se pudo enviar el formulario.", "error");
+
+  } finally {
+    // Se limpia el formulario siempre, independientemente del resultado.
     formData.value = {
       titulo: "",
       localidad: "",
@@ -126,17 +147,12 @@ async function enviarFormulario() {
       hora: "",
       latitud: "",
       longitud: "",
-      guia: ""
+      guia_id: ""
     };
-
-    // Mostramos un mensaje de éxito
-    Swal.fire("¡Éxito!", "Ruta creada correctamente.", "success");
-
-  } catch (err) {
-    // Mostramos un mensaje de error
-    Swal.fire("Error", "No se pudo enviar el formulario.", "error");
   }
 }
+
+
 </script>
 
 <template>
@@ -146,13 +162,12 @@ async function enviarFormulario() {
       <form @submit.prevent="enviarFormulario">
         <div class="mb-3">
           <label for="titulo" class="form-label">Título *</label>
-          <input aria-required="true" type="text" id="titulo" class="form-control" placeholder="Ej: Mar de olivos" v-model="formData.titulo" required />
+          <input aria-required="true" type="text" id="titulo" class="form-control" placeholder="Ej: Mar de olivos" v-model="formData.titulo"  />
         </div>
 
         <div class="mb-3">
           <label class="form-label" for="localidad">Localidad *</label>
-          <input aria-required="true" type="text" id="localidad" class="form-control" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"
-            required />
+          <input aria-required="true" type="text" id="localidad" class="form-control" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"/>
         </div>
 
         <div class="mb-3">
@@ -163,17 +178,17 @@ async function enviarFormulario() {
 
         <div class="mb-3">
           <label class="form-label" for="foto">Foto *</label>
-          <input type="text" aria-required="true" id="foto" class="form-control" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" required />
+          <input type="text" aria-required="true" id="foto" class="form-control" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" />
         </div>
 
         <div class="mb-3">
           <label class="form-label" for="fecha">Fecha *</label>
-          <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control" v-model="formData.fecha" required />
+          <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control" v-model="formData.fecha" />
         </div>
 
         <div class="mb-3">
           <label class="form-label" for="hora">Hora *</label>
-          <select class="form-select" id="hora" v-model="formData.hora" required>
+          <select class="form-select" id="hora" v-model="formData.hora">
             <option value="" disabled>Seleccione una hora</option>
             <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
           </select>
@@ -194,7 +209,7 @@ async function enviarFormulario() {
         </div> -->
         <div class="mb-3">
           <label class="form-label" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
-          <select id="guia" class="form-control" @click="comprobarGuias" v-model="formData.guia" required>
+          <select id="guia" class="form-control" @click="comprobarGuias" v-model="formData.guia">
             <option value="" disabled>Seleccione el id del guia</option>
             <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
           </select>

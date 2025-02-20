@@ -67,18 +67,18 @@ async function iniciarSesion() {
         id: usuarioEncontrado.id,
         email: usuarioEncontrado.email
       });
-      
+
       errorLogin.value = "";
       cerrarModalLogin();
-      router2.push("/")
+      router2.push("/");
     } else {
       errorLogin.value = "Usuario o contraseña incorrectos";
-      // Limpiar el formulario de login tras un intento fallido
-      form.value.usuario = "";
-      form.value.password = "";
     }
   } catch (err) {
     errorLogin.value = "Error al cargar los datos";
+   
+  }finally{
+    //Usamos un bloque finally para limpiar el formulario sea cual sea el resultado
     form.value.usuario = "";
     form.value.password = "";
   }
@@ -86,13 +86,12 @@ async function iniciarSesion() {
 
 // Función para registrar usuario
 async function registrarUsuario() {
-  // Validación de campos en el formulario de registro
+  // Validamos que estén todos los campos en el formulario de registro
   if (!formRegistro.value.usuario || !formRegistro.value.email || !formRegistro.value.password) {
     errorRegistro.value = "Todos los campos son obligatorios";
     return;
   }
 
-  // Crear el objeto con los datos que la API espera.
   const nuevoUsuario = {
     nombre: formRegistro.value.usuario,
     email: formRegistro.value.email,
@@ -108,27 +107,20 @@ async function registrarUsuario() {
       },
       body: JSON.stringify(nuevoUsuario)
     });
-    
+
     if (!response.ok) {
       errorRegistro.value = "Error al registrar el usuario";
-      return;
+    } else {
+      errorRegistro.value = "";
+      cerrarModalRegistro();
+      abrirModalLogin();
     }
-    
-    // De esta manera saltaría un alert en caso que se crease correctamente el usuario
-    //const result = await response.json();
-    //Swal.fire("¡Usuario registrado!", "Inicie sesión para comenzar la aventura", "success");
-    //if(result) alert("Usuario Creado")
-
-    // Limpiar el formulario y el error de registro
-    formRegistro.value = { usuario: "", email: "", password: "" };
-    errorRegistro.value = "";
-    
-    // Cerrar el modal de registro y abrir el modal de login para que el usuario pueda iniciar sesión
-    cerrarModalRegistro();
-    abrirModalLogin();
     
   } catch (err) {
     errorRegistro.value = "Error al registrar el usuario";
+  } finally {
+    // Se limpia el formulario sin importar el resultado
+    formRegistro.value = { usuario: "", email: "", password: "" };
   }
 }
 
@@ -155,7 +147,7 @@ function cerrarSesion() {
               <a class="nav-link" @click.prevent="router.push('/')" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#reservar">Reservar Viaje</a>
+              <a class="nav-link" @click.prevent="router.push('/')">Reservar Viaje</a>
             </li>
             
             

@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
+import NoData from "@/components/NoData.vue";
+
 
 
 // Almacenamos la lista de rutas
@@ -62,7 +64,7 @@ obtenerRutas()
 </script>
 
 <template>
-    <div class="container">
+    <div v-if="listaRutas.length > 0" class="container">
         <h2 class="text-center">Listado de Rutas</h2>
         
         <p v-if="error" class="text-red-500">{{ error }}</p>
@@ -84,6 +86,8 @@ obtenerRutas()
             </div>
         </div>
     </div>
+    <NoData v-else mensaje="No se encontraron rutas" submensaje="Cree alguna ruta para previsualizarlas." />
+
 </template>
 
 <style scoped>
