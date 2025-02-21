@@ -112,7 +112,7 @@ obtenerUsuarios()
         </tr>
       </thead>
       <tbody>
-        <tr class="text-center" v-for="usuario in usuarios" :key="usuario.id">
+        <tr class="text-center" v-for="usuario in usuarios.slice(1)" :key="usuario.id">
           <td headers="id">{{ usuario.id }}</td>
           <td headers="name">{{ usuario.nombre }}</td>
           <td headers="rol">
@@ -121,9 +121,11 @@ obtenerUsuarios()
             </select>
           </td>
           <td headers="eliminar">
-            <button class="btn-delete col-7 mt-1 p-2" aria-label="Eliminar usuario" @click="eliminarUsuario(usuario.id)">❌ Eliminar usuario</button>
+            <button class="btn-delete col-7 mt-1 p-2" aria-label="Eliminar usuario"
+              @click="eliminarUsuario(usuario.id)">❌ Eliminar usuario</button>
           </td>
         </tr>
+
       </tbody>
     </table>
   </div>
