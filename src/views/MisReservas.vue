@@ -102,11 +102,11 @@ onMounted(function(){
 
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
-    <div class="tarjetas justify-content-between">
-      <div v-for="ruta in listaRutas" :key="ruta.id" class="bg-white shadow rounded row pt-4 pb-5">
+    <div class="tarjetas justify-content-between col-xs-12 col-md-12 col-lg-12">
+      <div v-for="ruta in listaRutas" :key="ruta.id" class="bg-white shadow rounded row pt-4 pb-5 col-xs-12 mb-4">
         <h2 class="text-center mb-4">{{ ruta.ruta_titulo }}</h2>
 
-        <img :src="ruta.foto" alt="Imagen de la ruta" title="Imagen de la ruta" class="rounded col-5">
+        <img :src="ruta.foto" alt="Imagen de la ruta" title="Imagen de la ruta" class="rounded col-xl-8 col-lg-10 col-md-12">
 
         <div class="col 4">
           <div class="col-12 row">

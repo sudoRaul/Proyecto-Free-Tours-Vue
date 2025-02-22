@@ -29,19 +29,18 @@ obtenerRutas();
         <h2 class="text-center mt-5 mb-5">Listado de rutas pendientes</h2>
         <p v-if="error" class="text-red-500">{{ error }}</p>
 
-        <div class="tarjetas justify-content-between">
-            <div v-for="ruta in listaRutas" :key="ruta.ruta_id" class="bg-white shadow rounded row pt-4 pb-5">
-                <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="rounded col-5">
-                <div class="col-7">
+        <div class="tarjetas justify-content-between col-xs-12 col-md-12 col-lg-12">
+            <div v-for="ruta in listaRutas" :key="ruta.ruta_id" class="bg-white shadow rounded row pt-4 pb-5 col-xs-12 mb-4">
+                <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="rounded col-xl-8 col-lg-10 col-md-12">
+                <main class="col-7">
                     <p class="text-gray-700 font-semibold">📅 {{ ruta.ruta_fecha }}</p>
-
                     <p class="font-semibold mt-3">🧑‍🤝‍🧑 Asistentes:</p>
                     <ul>
                         <li v-for="reserva in ruta.reservas" :key="reserva.reserva_id">
                             - {{ reserva.cliente.nombre }}
                         </li>
                     </ul>
-                </div>
+                </main>
             </div>
         </div>
     </div>
@@ -50,5 +49,11 @@ obtenerRutas();
 .tarjetas {
     width: 50%;
     margin: auto;
+}.tarjetas div {
+  transition: transform 0.3s ease-in-out;
+}
+
+.tarjetas div:hover {
+  transform: scale(1.05);
 }
 </style>

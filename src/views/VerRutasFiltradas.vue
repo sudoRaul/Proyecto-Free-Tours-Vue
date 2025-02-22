@@ -50,13 +50,12 @@ obtenerRutasFiltradas()
                 class="tarjeta bg-white shadow rounded row pt-4 pb-5 mb-4 col-md-10 col-lg-8 text-decoration-none text-dark">
                 <h2 class="text-center">{{ ruta.titulo }}</h2>
                 <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" 
-                    class="rounded col-5 img-fluid">
+                    class="rounded col-5">
                 
                 <div class="col-7 d-flex flex-column justify-content-center">
                     <p class="text-gray-700 font-semibold col-12 fs-5">📅 {{ ruta.fecha }}</p>
                     <p class="text-gray-500 col-12 fs-5">📍 {{ ruta.localidad }}</p>
                     <p class="text-gray-500 col-12 fs-5">👉 Pulse aquí para ver más información de la ruta</p>
-
                 </div>
             </router-link>
         </div>

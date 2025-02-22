@@ -64,23 +64,23 @@ obtenerRutas()
 </script>
 
 <template>
-    <div v-if="listaRutas.length > 0" class="container">
-        <h2 class="text-center">Listado de Rutas</h2>
+    <div v-if="listaRutas.length > 0" class="container col-xs-12 mb-4">
+        <h2 class="text-center mt-4 mb-4">Listado de Rutas</h2>
         
         <p v-if="error" class="text-red-500">{{ error }}</p>
 
-        <div class="tarjetas justify-content-between">
-            <div v-for="ruta in listaRutas" :key="ruta.id" class="bg-white shadow rounded row pt-4 pb-5">
-                <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded col-5">
+        <div class="tarjetas justify-content-between col-xs-12 col-md-12 col-lg-12">
+            <div v-for="ruta in listaRutas" :key="ruta.id" class="bg-white shadow rounded row pt-4 pb-5 mb-3">
+                <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="rounded col-xl-8 col-lg-10 col-md-12 ">
 
-                <div class="col 7">
-                    <div class="col-12">
-                        <p class="text-gray-700 font-semibold col-5">📅 {{ ruta.fecha }}</p>
-                        <p class="text-gray-500 col-4">👤 Guía: {{ ruta.guia_nombre }}</p>
-                    </div>
+                <main>
+                    <main class="col-12">
+                        <p class="text-gray-700 font-semibold col-xl-5">📅 {{ ruta.fecha }}</p>
+                        <p class="text-gray-500 col-xl-4">👤 Guía: {{ ruta.guia_nombre }}</p>
+                    </main>
                     <button aria-label="Eliminar ruta" @click="eliminarRuta(ruta.id)" class="btn-delete col-7 mt-1 p-2">❌ Eliminar ruta</button>
 
-                </div>
+                </main>
 
                
             </div>
@@ -94,6 +94,12 @@ obtenerRutas()
 .tarjetas {
     width: 50%;
     margin: auto;
+}.tarjetas div {
+  transition: transform 0.3s ease-in-out;
+}
+
+.tarjetas div:hover {
+  transform: scale(1.05);
 }
 
 .btn-delete {

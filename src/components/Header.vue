@@ -63,7 +63,7 @@ async function iniciarSesion() {
     if (usuarioEncontrado) {
       emit("sesionIniciada", {
         usuario: usuarioEncontrado.nombre,
-        rol: usuarioEncontrado.rol, 
+        rol: usuarioEncontrado.rol,
         id: usuarioEncontrado.id,
         email: usuarioEncontrado.email
       });
@@ -76,8 +76,8 @@ async function iniciarSesion() {
     }
   } catch (err) {
     errorLogin.value = "Error al cargar los datos";
-   
-  }finally{
+
+  } finally {
     //Usamos un bloque finally para limpiar el formulario sea cual sea el resultado
     form.value.usuario = "";
     form.value.password = "";
@@ -115,7 +115,7 @@ async function registrarUsuario() {
       cerrarModalRegistro();
       abrirModalLogin();
     }
-    
+
   } catch (err) {
     errorRegistro.value = "Error al registrar el usuario";
   } finally {
@@ -133,71 +133,83 @@ function cerrarSesion() {
 </script>
 
 <template>
-  <header class="bg-light text-black align-items-center row">
-    <div class="row">
-      <h1 class="col-3" @click.prevent="router.push('./')">
-        <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
-        {{ title }}
-      </h1>
+  <header class="bg-light text-black ">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <h1 class="navbar-brand" @click.prevent="router.push('./')">
+          <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
+          {{ title }}
+        </h1>
 
-      <div class="navbar navbar-expand-lg navbar-light col-6 pb-4">
-        <div class="collapse navbar-collapse align-items-center justify-content-center">
-          <ul class="navbar-nav mr-auto">
+        <!-- Botón de menú hamburguesa -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse me-5 pe-5" id="navbarNav">
+          <ul class="navbar-nav ms-auto text-center">
             <li class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/')" href="#">Home</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/')" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/')">Reservar Viaje</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/')">Reservar Viaje</a>
             </li>
-            
-            
+
             <!-- Opciones para Administrador -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
             </li>
 
             <!-- Opciones para Guía -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'guia'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
             </li>
 
             <!-- Opciones para Cliente -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
-            </li>
-
-            
-            <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link" href="#topDestinos">Mejores destinos</a>
+              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
             </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link" href="#quienesSomos">Sobre nosotros</a>
+              <a class="nav-link btn btn-outline-secondary" href="#topDestinos">Mejores destinos</a>
             </li>
-           
+
             <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link" href="#" @click.prevent="abrirModalLogin">Login</a>
+              <a class="nav-link btn btn-outline-secondary" href="#quienesSomos">Sobre nosotros</a>
+            </li>
+
+            <li v-if="!usuarioAutenticado" class="nav-item">
+              <a class="nav-link btn btn-outline-secondary" href="#" @click.prevent="abrirModalLogin">Login</a>
+            </li>
+            <li v-if="usuarioAutenticado" class="nav-item">
+              <a class="nav-link btn btn-outline-secondary" href="#" @click.prevent="cerrarSesion">Logout</a>
             </li>
           </ul>
         </div>
+        <div v-if="usuarioAutenticado" class="col-3 mt-4 d-none d-lg-block mb-4 ms-5">
+          <h6 class="d-block text-center">
+            Bienvenid@, {{ usuarioAutenticado?.usuario }}
+          </h6>
+          
+        </div>
+        <div v-else class="col-3 mt-4 d-none d-lg-block mb-4 ms-5">
+          <h6 class="d-block text-center">
+            
+          </h6>
+          
+        </div>
       </div>
-
-      <div v-if="usuarioAutenticado" class="col-3 mt-4">
-        <span>
-          Bienvenid@, {{ usuarioAutenticado?.usuario }} ({{ usuarioAutenticado?.rol }})
-          <button @click="cerrarSesion" class="btn btn-danger">Cerrar Sesión</button>
-        </span>
-      </div>
-    </div>
+    </nav>
   </header>
 
   <!-- Modal de Login -->
@@ -253,7 +265,8 @@ function cerrarSesion() {
             </div>
             <div class="mb-3">
               <label class="form-label">Contraseña</label>
-              <input type="password" v-model="formRegistro.password" class="form-control" placeholder="Ingrese una contraseña" />
+              <input type="password" v-model="formRegistro.password" class="form-control"
+                placeholder="Ingrese una contraseña" />
             </div>
             <p v-if="errorRegistro" class="text-danger mt-2">{{ errorRegistro }}</p>
             <div class="modal-footer">
@@ -267,7 +280,7 @@ function cerrarSesion() {
   </div>
 </template>
 <style scoped>
-h1{
+h1 {
   cursor: pointer;
 }
 </style>
