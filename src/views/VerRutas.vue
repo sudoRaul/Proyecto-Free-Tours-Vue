@@ -2,8 +2,11 @@
 import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
+import router from "@/router";
 
-const id = JSON.parse(localStorage.getItem("sesion")).id;
+
+
+
 
 const sesion = localStorage.getItem("sesion");
 const cliente_id = sesion ? JSON.parse(sesion).id : null;
@@ -67,7 +70,7 @@ obtenerRutas()
 </script>
 
 <template>
-    <div v-if="listaRutas.length > 0 && cliente_id" class="container col-xs-12 mb-4">
+    <div v-if="listaRutas.length > 0" class="container col-xs-12 mb-4">
         <h2 class="text-center mt-4 mb-4">Listado de Rutas</h2>
         
         <p v-if="error" class="text-red-500">{{ error }}</p>
@@ -89,7 +92,6 @@ obtenerRutas()
             </div>
         </div>
     </div>
-    <NoData v-else mensaje="No se encontraron rutas" submensaje="Cree alguna ruta para previsualizarlas." />
 
 </template>
 

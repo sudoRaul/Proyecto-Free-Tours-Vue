@@ -57,7 +57,7 @@ const router = createRouter({
       component: VerRutasFiltradas
     },
     {
-      path: '/info-completa-ruta/:id',
+      path: '/info-completa-ruta/:id/:logued?',
       name: 'info-completa-ruta',
       component: InfoCompletaRuta
     }

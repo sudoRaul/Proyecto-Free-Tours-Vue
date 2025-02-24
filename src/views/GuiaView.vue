@@ -1,11 +1,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import NoData from "@/components/NoData.vue";
+import router from "@/router";
 
 
 const listaRutas = ref([]);
 const error = ref(null);
 const idGuia = JSON.parse(localStorage.getItem("sesion")).id;
+const sesion = localStorage.getItem("sesion");
+const rol = sesion ? JSON.parse(sesion).rol : null;
+
+if(rol != "guia"){
+  router.push("/")
+}
 
 async function obtenerRutas() {
     try {

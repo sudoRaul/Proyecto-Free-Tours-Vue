@@ -1,20 +1,26 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 
-
+const router = useRouter()
 const route = useRoute();
 const idRuta = ref(route.params.id);
+const isReservado = ref(route.params.logued);
 const infoRuta = ref([]);
 const numPersonas = ref(1);
 let map;
 
+
 const sesion = localStorage.getItem("sesion");
 const cliente_id = sesion ? JSON.parse(sesion).id : null;
+
+const email = sesion ? JSON.parse(sesion).email : null;
+
+const url = route.path.split("/")[1]
 
 // Obtenemos la información de la ruta
 function obtenerInfo() {
@@ -39,11 +45,16 @@ function inicializarMapas() {
 
 // Realizamos la reserva
 async function reservarRuta() {
+
+  if (!email) {
+    Swal.fire("Error", "No se pudo obtener el email del usuario. Inicia sesión nuevamente.", "error");
+    return;
+  }
+
   const reservaData = {
     ruta_id: idRuta.value,
-    cliente_id: cliente_id,
+    email: email, 
     num_personas: numPersonas.value,
-    fecha_reserva: infoRuta.fecha,
   };
 
   try {
@@ -79,6 +90,9 @@ function comprobarLogin(){
   }
 }
 
+function volverReservas(){
+  router.push('/mis-reservas')
+}
 
 
 onMounted(() => {
@@ -87,7 +101,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mt-4 mb-5" v-if="cliente_id">
+  <div class="container mt-4 mb-5">
     <h1 class="text-center mb-1">{{ infoRuta.titulo }}</h1>
 
     <div class="row">
@@ -99,7 +113,8 @@ onMounted(() => {
         <p class="fs-5"><strong>📅 Fecha:</strong> {{ infoRuta.fecha }}</p>
         <p class="fs-5"><strong>📍 Localidad:</strong> {{ infoRuta.localidad }}</p>
         <p class="fs-5"><strong>⌚ Horario:</strong> {{ infoRuta.hora }}</p>
-        <button v-if="cliente_id" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservaModal">Reservar ruta</button>
+        <button v-if="isReservado" class="btn btn-primary" @click="volverReservas">Volver a Reservas</button>
+        <button v-else-if="cliente_id" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservaModal">Reservar ruta</button>
         <button v-else class="btn btn-primary" @click="comprobarLogin">Reservar ruta</button>
 
       </div>

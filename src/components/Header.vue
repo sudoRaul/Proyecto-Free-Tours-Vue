@@ -196,7 +196,7 @@ function cerrarSesion() {
             </li>
           </ul>
         </div>
-        <div v-if="usuarioAutenticado" class="col-3 mt-4 d-none d-lg-block mb-4 ms-5">
+        <div v-if="usuarioAutenticado" class="col-3 mt-4 d-none d-lg-block mb-4 ms-5 ps-5">
           <h6 class="d-block text-center">
             Bienvenid@, {{ usuarioAutenticado?.usuario }}
           </h6>

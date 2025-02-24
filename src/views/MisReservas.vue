@@ -1,14 +1,32 @@
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, defineComponent } from "vue";
+import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import NoData from "@/components/NoData.vue";
 
+const router = useRouter(); // Necesario para la navegación
+
+
+const sesion = localStorage.getItem("sesion");
+const rol = sesion ? JSON.parse(sesion).rol : null;
+
+if(rol != "cliente"){
+  router.push("/")
+}
 
 const listaRutas = ref([]);
 const error = ref("");
 const emailUsuario = JSON.parse(localStorage.getItem("sesion")).email;
+
+//Usamos este isLogued para en la vista de mostrar toda la Info
+//saber si ha reservado ya o no
+const isLogued = rol ? true : false
+
+
+// Función para redirigir a la página de detalles de la ruta
+function verDetallesRuta(id) {
+  router.push(`/info-completa-ruta/${id}/${isLogued}`);
+}
 
 // Función para obtener las rutas desde la API
 async function obtenerRutas() {
@@ -17,36 +35,14 @@ async function obtenerRutas() {
     if (!response.ok) throw new Error("Error al obtener las rutas");
 
     const data = await response.json();
-    listaRutas.value = data; // Guardamos las rutas en la variable reactiva
+    listaRutas.value = data;
 
-    // Esperamos a que se actualice el DOM antes de inicializar los mapas
-    await nextTick();
-    inicializarMapas();
   } catch (err) {
     error.value = err.message;
   }
 }
 
-// Inicializamos los mapas en cada ruta
-function inicializarMapas() {
-  listaRutas.value.forEach((ruta) => {
-    const mapId = `map-${ruta.id}`;
-
-    const map = L.map(mapId).setView([ruta.ruta_latitud, ruta.ruta_longitud], 13);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(map);
-
-    // Agregar marcador con popup
-    L.marker([ruta.ruta_latitud, ruta.ruta_longitud])
-      .addTo(map)
-      .bindPopup(`<b>${ruta.ruta_titulo}</b><br>${ruta.ruta_localidad}`)
-      .openPopup();
-  });
-}
-
-// Función para eliminar una ruta con confirmación de SweetAlert2
+// Función para eliminar una ruta
 async function eliminarRuta(rutaId) {
   const confirmacion = await Swal.fire({
     title: "¿Está seguro que quiere cancelar la ruta?",
@@ -67,7 +63,6 @@ async function eliminarRuta(rutaId) {
 
       if (!response.ok) throw new Error("Error al cancelar la ruta");
 
-      // Mostrar mensaje de éxito
       Swal.fire({
         icon: "success",
         title: "Ruta eliminada",
@@ -76,7 +71,6 @@ async function eliminarRuta(rutaId) {
         showConfirmButton: false,
       });
 
-      // Actualizar la lista de rutas
       obtenerRutas();
     } catch (err) {
       error.value = err.message;
@@ -89,10 +83,8 @@ async function eliminarRuta(rutaId) {
   }
 }
 
-// Llamamos a la función para mostrar las rutas al cargar el componente
-//obtenerRutas()
-onMounted(function(){
-  obtenerRutas()
+onMounted(() => {
+  obtenerRutas();
 });
 </script>
 
@@ -103,10 +95,12 @@ onMounted(function(){
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
     <div class="tarjetas justify-content-between col-xs-12 col-md-12 col-lg-12">
-      <div v-for="ruta in listaRutas" :key="ruta.id" class="bg-white shadow rounded row pt-4 pb-5 col-xs-12 mb-4">
+      <div v-for="ruta in listaRutas" :key="ruta.ruta_id"
+        class="bg-white shadow rounded row pt-4 pb-5 col-xs-12 mb-4 tarjeta" @click="verDetallesRuta(ruta.ruta_id)">
         <h2 class="text-center mb-4">{{ ruta.ruta_titulo }}</h2>
 
-        <img :src="ruta.foto" alt="Imagen de la ruta" title="Imagen de la ruta" class="rounded col-xl-8 col-lg-10 col-md-12">
+        <img :src="ruta.foto" alt="Imagen de la ruta" title="Imagen de la ruta"
+          class="rounded col-xl-8 col-lg-10 col-md-12">
 
         <div class="col 4">
           <div class="col-12 row">
@@ -114,22 +108,25 @@ onMounted(function(){
             <p class="text-gray-700 font-semibold col-5">🏙️ {{ ruta.ruta_localidad }}</p>
             <p class="text-gray-700 font-semibold col-5">⌚ {{ ruta.ruta_hora }}</p>
           </div>
-          <button aria-label="Eliminar reserva" @click="eliminarRuta(ruta.id)" class="btn-delete col-7 mt-1 p-2">❌ Eliminar reserva</button>
+          <button aria-label="Eliminar reserva" @click="eliminarRuta(ruta.ruta_id)" class="btn-delete col-7 mt-1 p-2">
+            ❌ Eliminar reserva
+          </button>
         </div>
-        <div :id="'map-' + ruta.id" class="map-container"></div>
       </div>
     </div>
   </div>
-  <NoData v-else mensaje="No se encontraron rutas" submensaje="Reserve alguna ruta para previsualizarlas en este apartado." />
-
+  <NoData v-else mensaje="No se encontraron rutas"
+    submensaje="Reserve alguna ruta para previsualizarlas en este apartado." />
 </template>
 
 <style scoped>
-.map-container {
-  height: 300px;
-  width: 100%;
-  border-radius: 10px;
-  margin-top: 20px;
+.tarjeta {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.tarjeta:hover {
+  transform: scale(1.03);
 }
 
 .btn-delete {

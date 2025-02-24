@@ -4,17 +4,17 @@ import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
 
-const sesion = localStorage.getItem("sesion");
-const cliente_id = sesion ? JSON.parse(sesion).id : null;
 
 const route = useRoute();
-const localidad = ref(route.params.localidad || ""); // Si no hay localidad, será una cadena vacía
+const localidad = ref(route.params.localidad || "");
 const fecha = ref(route.params.fecha);
 const listaRutas = ref([]);
 
+
+
 async function obtenerRutasFiltradas() {
     try {
-        // Construcción dinámica de la URL
+        // En caso de tener localidad se la añadimos a la URL
         let url = `http://localhost/APIFreetours/api.php/rutas?fecha=${fecha.value}`;
         if (localidad.value) {
             url += `&localidad=${localidad.value}`;
@@ -24,7 +24,7 @@ async function obtenerRutasFiltradas() {
         if (!response.ok) throw new Error("Error al obtener las rutas");
 
         const data = await response.json();
-        listaRutas.value = data; // Guardamos las rutas en la variable reactiva
+        listaRutas.value = data;
     } catch (error) {
         Swal.fire({
             icon: "error",
@@ -34,13 +34,13 @@ async function obtenerRutasFiltradas() {
     }
 }
 
-// Llamar a la función cuando el componente se monte
+// Llamamos a la función cuando el componente se monte
 //onMounted(obtenerRutasFiltradas);
 obtenerRutasFiltradas()
 </script>
 
 <template>
-    <div v-if="listaRutas.length > 0 && cliente_id" class="container">
+    <div v-if="listaRutas.length > 0" class="container">
         <h1 class="text-center my-4">Rutas {{ localidad ? `en ${localidad}` : "" }} para la fecha {{ fecha }}</h1>
 
 
@@ -68,13 +68,13 @@ obtenerRutasFiltradas()
 
 <style scoped>
 .tarjeta {
-    min-height: 250px; /* Aumenta la altura de la tarjeta */
+    min-height: 250px; 
     padding: 20px;
-    transition: transform 0.2s ease-in-out; /* Pequeño efecto al pasar el cursor */
+    transition: transform 0.2s ease-in-out;
 }
 
 .tarjeta:hover {
-    transform: scale(1.02); /* Hace que la tarjeta crezca ligeramente */
+    transform: scale(1.02);
 }
 </style>
 
