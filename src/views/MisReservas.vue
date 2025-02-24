@@ -97,7 +97,7 @@ onMounted(function(){
 </script>
 
 <template>
-  <div v-if="listaRutas.length > 0" class="container">
+  <div v-if="listaRutas.length > 0 && emailUsuario" class="container">
     <h1 class="text-center mb-4 mt-4">Mis Reservas</h1>
 
     <p v-if="error" class="text-red-500">{{ error }}</p>

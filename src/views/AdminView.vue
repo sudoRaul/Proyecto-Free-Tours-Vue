@@ -5,6 +5,10 @@ import Swal from "sweetalert2";
 const usuarios = ref([]);
 const rolesDisponibles = ["admin", "guia", "cliente"];
 
+const sesion = localStorage.getItem("sesion");
+const id = sesion ? JSON.parse(sesion).id : null;
+
+
 // Obtenenemos los usuarios
 async function obtenerUsuarios() {
   try {
@@ -100,7 +104,7 @@ obtenerUsuarios()
 </script>
 
 <template>
-  <div>
+  <div v-if="id">
     <h2 class="text-center mt-5 mb-4">Gestión de Usuarios</h2>
     <table class="table table-striped mb-5 mt-3">
       <thead>
@@ -129,6 +133,7 @@ obtenerUsuarios()
       </tbody>
     </table>
   </div>
+
 </template>
 
 <style scoped>

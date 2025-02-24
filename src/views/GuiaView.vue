@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import NoData from "@/components/NoData.vue";
+
 
 const listaRutas = ref([]);
 const error = ref(null);
@@ -25,7 +27,7 @@ obtenerRutas();
 </script>
 
 <template>
-    <div>
+    <div v-if="listaRutas.length > 0 && idGuia">
         <h2 class="text-center mt-5 mb-5">Listado de rutas pendientes</h2>
         <p v-if="error" class="text-red-500">{{ error }}</p>
 
@@ -44,6 +46,7 @@ obtenerRutas();
             </div>
         </div>
     </div>
+    <NoData v-else mensaje="No se encontraron rutas" submensaje="Acualmente no tiene rutas pendientes." />
 </template>
 <style scoped>
 .tarjetas {

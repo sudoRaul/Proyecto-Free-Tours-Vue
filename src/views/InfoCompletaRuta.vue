@@ -87,7 +87,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mt-4 mb-5">
+  <div class="container mt-4 mb-5" v-if="cliente_id">
     <h1 class="text-center mb-1">{{ infoRuta.titulo }}</h1>
 
     <div class="row">

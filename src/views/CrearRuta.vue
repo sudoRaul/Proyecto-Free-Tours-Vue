@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+const sesion = localStorage.getItem("sesion");
+const id = sesion ? JSON.parse(sesion).id : null;
+
 //Inicializamos la lista de los guias
 const listaGuias = ref([])
 // Inicializamos los valores del formulario de forma reactiva
@@ -156,7 +159,7 @@ async function enviarFormulario() {
 </script>
 
 <template>
-  <div class="container mt-4">
+  <div class="container mt-4" v-if="id">
     <div class="card p-4 shadow mb-5">
       <h2 class="mb-3 text-center">Formulario de Tour</h2>
       <form @submit.prevent="enviarFormulario">

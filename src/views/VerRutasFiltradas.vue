@@ -4,6 +4,8 @@ import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
 
+const sesion = localStorage.getItem("sesion");
+const cliente_id = sesion ? JSON.parse(sesion).id : null;
 
 const route = useRoute();
 const localidad = ref(route.params.localidad || ""); // Si no hay localidad, será una cadena vacía
@@ -38,7 +40,7 @@ obtenerRutasFiltradas()
 </script>
 
 <template>
-    <div v-if="listaRutas.length > 0" class="container">
+    <div v-if="listaRutas.length > 0 && cliente_id" class="container">
         <h1 class="text-center my-4">Rutas {{ localidad ? `en ${localidad}` : "" }} para la fecha {{ fecha }}</h1>
 
 
