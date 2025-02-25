@@ -95,9 +95,7 @@ function volverReservas(){
 }
 
 
-onMounted(() => {
-  obtenerInfo();
-});
+onMounted(obtenerInfo);
 </script>
 
 <template>

@@ -95,8 +95,7 @@ async function eliminarUsuario(usuarioId) {
 }
 
 // Cargamos los usuarios al montar el componente
-obtenerUsuarios()
-//onMounted(obtenerUsuarios);
+onMounted(obtenerUsuarios);
 </script>
 
 <template>

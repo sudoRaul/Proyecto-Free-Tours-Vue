@@ -35,8 +35,7 @@ async function obtenerRutasFiltradas() {
 }
 
 // Llamamos a la función cuando el componente se monte
-//onMounted(obtenerRutasFiltradas);
-obtenerRutasFiltradas()
+onMounted(obtenerRutasFiltradas);
 </script>
 
 <template>

@@ -136,8 +136,8 @@ function cerrarSesion() {
   <header class="bg-light text-black ">
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container-fluid">
-        <h1 class="navbar-brand" @click.prevent="router.push('./')">
-          <img src="@/images/iconos/logo.svg" alt="Logotipo" width="100px" height="100px" />
+        <h1 class="navbar-brand " @click.prevent="router.push('./')">
+          <img src="@/images/iconos/logo.svg" class="me-1" alt="Logotipo" width="100px" height="100px" />
           {{ title }}
         </h1>
 
@@ -147,57 +147,57 @@ function cerrarSesion() {
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse me-5 pe-5" id="navbarNav">
+        <div class="collapse navbar-collapse me-5  ms-5" id="navbarNav">
           <ul class="navbar-nav ms-auto text-center">
             <li class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/')" href="#">Home</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/')" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/')">Reservar Viaje</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/')">Reservar Viaje</a>
             </li>
 
             <!-- Opciones para Administrador -->
-            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item ">
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
             </li>
 
             <!-- Opciones para Guía -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'guia'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
             </li>
 
             <!-- Opciones para Cliente -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
             </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" href="#topDestinos">Mejores destinos</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" href="#topDestinos">Mejores destinos</a>
             </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" href="#quienesSomos">Sobre nosotros</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" href="#quienesSomos">Sobre nosotros</a>
             </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" href="#" @click.prevent="abrirModalLogin">Login</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" href="#" @click.prevent="abrirModalLogin">Login</a>
             </li>
             <li v-if="usuarioAutenticado" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" href="#" @click.prevent="cerrarSesion">Logout</a>
+              <a class="nav-link btn btn-outline-secondary fs-5" href="#" @click.prevent="cerrarSesion">Logout</a>
             </li>
           </ul>
         </div>
         <div v-if="usuarioAutenticado" class="col-3 mt-4 d-none d-lg-block mb-4 ms-5 ps-5">
-          <h6 class="d-block text-center">
+          <h6 class="d-block text-center fs-5">
             Bienvenid@, {{ usuarioAutenticado?.usuario }}
           </h6>
           

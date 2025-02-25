@@ -65,8 +65,7 @@ async function eliminarRuta(id) {
 };
 
 // Cargamos las rutas al montar el componente
-obtenerRutas()
-//onMounted(obtenerRutas);
+onMounted(obtenerRutas);
 </script>
 
 <template>

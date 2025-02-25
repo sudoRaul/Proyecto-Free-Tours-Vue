@@ -1,9 +1,9 @@
 <template>
     <footer class="footer">
-      <p>Sigue Nuestras Redes Sociales</p>
+      <p class="fs-5">Sigue Nuestras Redes Sociales</p>
       <span>
-        <span class="me-5"><img src="@/images/iconos/email.svg" alt="Email Logo"> dreamTrip@gmail.com</span>
-        <span><img src="@/images/iconos/telefono.svg" alt="Telefono Logo">+376 845 051 921</span>
+        <span class="me-5 fs-5"><img src="@/images/iconos/email.svg" alt="Email Logo"> dreamTrip@gmail.com</span>
+        <span class="fs-5"><img src="@/images/iconos/telefono.svg" alt="Telefono Logo">+376 845 051 921</span>
       </span>
       <br>
       <div>

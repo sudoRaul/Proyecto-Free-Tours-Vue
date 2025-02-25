@@ -26,11 +26,7 @@ async function obtenerRutas() {
         error.value = err.message;
     }
 }
-
-/*onMounted(() => {
-    obtenerRutas();
-});*/
-obtenerRutas();
+onMounted(obtenerRutas);
 </script>
 
 <template>

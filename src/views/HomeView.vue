@@ -1,5 +1,5 @@
 <script setup>
- import { ref } from "vue";
+ import { onMounted, ref } from "vue";
  import router from "../router";
  import Swal from "sweetalert2";
   
@@ -15,7 +15,7 @@ const showControls = ref(false);
 const isPlaying = ref(false);
 const isMuted = ref(false);
 const isFullscreen = ref(false);
-const speed = ref(1); // Inicializamos la velocidad a 1
+const speed = ref(1); // Inicializamos la velocidad del video a 1
 // Necesitaremos la fecha de hoy para que se introduzca una fecha a partir de esta
 const fechaHoy = new Date().toISOString().split("T")[0];
 
@@ -79,7 +79,8 @@ async function obtenerRutas() {
         error.value = err.message;
     }
 };
-obtenerRutas()
+
+onMounted(obtenerRutas)
 
 const validarFormulario = () => {
   if (!fecha.value) {
@@ -183,13 +184,13 @@ const validarFormulario = () => {
       <h2 class="text-center fw-bold mb-4">Mejores destinos</h2>
       <div class="row justify-content-around mb-5">
         <img src="@/images/contenido/madrid.jpg" alt="Foto Madrid" aria-hidden="true" title="Madrid" class="imagenContenedor col-3 mb-4">
-        <img src="@/images/contenido/canada.jpg" alt="Foto Canada" aria-hidden="true" title="Canadá" class="imagenContenedor col-3">
-        <img src="@/images/contenido/paris.jpg" alt="Foto Paris" aria-hidden="true" title="París" class="imagenContenedor col-3">
-        <img src="@/images/contenido/japon.jpg" alt="Foto Japon" aria-hidden="true" title="Japón" class="imagenContenedor col-3">
-        <img src="@/images/contenido/australia.jpg" alt="Foto Australia" aria-hidden="true" title="Australia" class="imagenContenedor col-3">
-        <img src="@/images/contenido/roma.jpg" alt="Foto Roma" aria-hidden="true" title="Roma" class="imagenContenedor col-3">
-        <img src="@/images/contenido/sf.jpg" alt="Foto San Francisco" aria-hidden="true" title="San Francisco" class="imagenContenedor col-3">
-        <img src="@/images/contenido/londres.jpg" alt="Foto Londres" aria-hidden="true" title="Londres" class="imagenContenedor col-3">
+        <img src="@/images/contenido/canada.jpg" alt="Foto Canada" aria-hidden="true" title="Canadá" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/paris.jpg" alt="Foto Paris" aria-hidden="true" title="París" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/japon.jpg" alt="Foto Japon" aria-hidden="true" title="Japón" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/australia.jpg" alt="Foto Australia" aria-hidden="true" title="Australia" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/roma.jpg" alt="Foto Roma" aria-hidden="true" title="Roma" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/sf.jpg" alt="Foto San Francisco" aria-hidden="true" title="San Francisco" class="imagenContenedor mb-4 col-3">
+        <img src="@/images/contenido/londres.jpg" alt="Foto Londres" aria-hidden="true" title="Londres" class="imagenContenedor mb-4 col-3">
       </div>
     </div>
     <div class="mb-5">

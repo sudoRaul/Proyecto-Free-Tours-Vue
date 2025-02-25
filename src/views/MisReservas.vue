@@ -83,9 +83,7 @@ async function eliminarRuta(rutaId) {
   }
 }
 
-onMounted(() => {
-  obtenerRutas();
-});
+onMounted(obtenerRutas);
 </script>
 
 <template>
