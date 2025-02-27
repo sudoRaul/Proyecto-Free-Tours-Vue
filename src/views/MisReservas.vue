@@ -71,7 +71,7 @@ onMounted(obtenerRutas);
 </script>
 
 <template>
-  <div v-if="listaRutasFuturas.length > 0 && listaRutasPasadas.length > 0" class="container">
+  <div v-if="listaRutasFuturas.length > 0 || listaRutasPasadas.length > 0" class="container">
     <h1 class="text-center mb-4 mt-4">Mis Reservas</h1>
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
