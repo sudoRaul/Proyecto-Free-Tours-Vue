@@ -106,19 +106,19 @@ const validarFormulario = () => {
         <div class="carousel-item active">
           <img src="@/images/carrusel/granCanion.png" class="d-block w-100 carousel-image" alt="Gran Canyon">
           <div class="carousel-caption d-none d-md-block">
-            <h5>Gran Canyon, Colorado, USA</h5>
+            <h4>Gran Canyon, Colorado, USA</h4>
           </div>
         </div>
         <div class="carousel-item">
           <img src="@/images/carrusel/alpesSuizos.webp" class="d-block w-100 carousel-image" alt="Los Alpes">
           <div class="carousel-caption d-none d-md-block">
-            <h5>Los Alpes, Suiza</h5>
+            <h4>Los Alpes, Suiza</h4>
           </div>
         </div>
         <div class="carousel-item">
           <img src="@/images/carrusel/sierraSegura.webp" class="d-block w-100 carousel-image" alt="Sierra de Segura">
           <div class="carousel-caption d-none d-md-block">
-            <h5>Sierra de Segura, Jaén, España</h5>
+            <h4>Sierra de Segura, Jaén, España</h4>
           </div>
         </div>
       </div>
@@ -165,17 +165,17 @@ const validarFormulario = () => {
             <div class="col-4">
               <img src="@/images/iconos/phoneIcon.png" alt="Icono Teléfono">
                 <h3 class="fw-bold">Experiencias personalizadas</h3>
-                <p class="fw-normal">Tours adaptados a las <br>necesidades de los clientes</p>
+                <p class="fw-normal fs-5">Tours adaptados a las <br>necesidades de los clientes</p>
             </div>
             <div class="col-4">
               <img src="@/images/iconos/star.png" alt="Icono Teléfono">
                 <h3 class="fw-bold">Guías expertos</h3>
-                <p class="fw-normal">Equipo formado por profesionales <br>con profundo conocimiento histórico y cultural</p>
+                <p class="fw-normal fs-5">Equipo formado por profesionales <br>con profundo conocimiento histórico y cultural</p>
             </div>
             <div class="col-4">
               <img src="@/images/iconos/relax.png" alt="Icono Teléfono">
                 <h3 class="fw-bold">Comodidad y seguridad</h3>
-                <p class="fw-normal">Seguros de viaje, atención al cliente 24 horas <br>los 365 días del año y cancelación gratuita</p>
+                <p class="fw-normal fs-5">Seguros de viaje, atención al cliente 24 horas <br>los 365 días del año y cancelación gratuita</p>
             </div>
         </div>
     </div>

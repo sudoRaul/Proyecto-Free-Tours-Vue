@@ -130,64 +130,75 @@ function cerrarSesion() {
   localStorage.removeItem("sesion");
   router2.push("/")
 }
+
+function toggleMenu(){
+  const menu = document.getElementById("navbarNav");
+    if (menu.classList.contains("show")) {
+      menu.classList.remove("show");
+    } else {
+      menu.classList.add("show");
+    }
+}
 </script>
 
 <template>
-  <header class="bg-light text-black ">
+  <header class="bg-light text-black">
     <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <h1 class="navbar-brand " @click.prevent="router.push('./')">
+      <div class="container-fluid d-flex justify-content-between align-items-center">
+
+
+        <h1 class="navbar-brand mb-0" @click="router.push('/')">
+
           <img src="@/images/iconos/logo.svg" class="me-1" alt="Logotipo" width="100px" height="100px" />
           {{ title }}
+
         </h1>
 
-        <!-- Botón de menú hamburguesa -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler" type="button" @click="toggleMenu">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse me-5  ms-5" id="navbarNav">
-          <ul class="navbar-nav ms-auto text-center">
-            <li class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/')" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/')">Reservar Viaje</a>
-            </li>
 
-            <!-- Opciones para Administrador -->
-            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item ">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/admin')" href="#">Lista de usuarios</a>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav text-center">
+            <li class="nav-item">
+              <router-link to="/" class="nav-link btn btn-outline-secondary fs-5"
+                active-class="active">Home</router-link>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/crear-ruta')" href="#">Crear ruta</a>
+              <router-link to="/admin" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Lista de
+                usuarios</router-link>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/ver-rutas')" href="#">Ver todas las rutas</a>
+              <router-link to="/crear-ruta" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Crear
+                ruta</router-link>
+            </li>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'admin'" class="nav-item">
+              <router-link to="/ver-rutas" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Ver
+                todas las rutas</router-link>
             </li>
 
-            <!-- Opciones para Guía -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'guia'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/visitas-pendientes')" href="#">Visitas pendientes</a>
+              <router-link to="/visitas-pendientes" class="nav-link btn btn-outline-secondary fs-5"
+                active-class="active">Visitas pendientes</router-link>
             </li>
 
-            <!-- Opciones para Cliente -->
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/mis-reservas')" href="#">Mis reservas</a>
+              <router-link to="/mis-reservas" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Mis
+                reservas</router-link>
             </li>
             <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
-              <a class="nav-link btn btn-outline-secondary fs-5" @click.prevent="router.push('/valoraciones')" href="#">Valoraciones</a>
+              <router-link to="/valoraciones" class="nav-link btn btn-outline-secondary fs-5"
+                active-class="active">Valoraciones</router-link>
             </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link btn btn-outline-secondary fs-5" href="#topDestinos">Mejores destinos</a>
             </li>
-
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link btn btn-outline-secondary fs-5" href="#quienesSomos">Sobre nosotros</a>
             </li>
-
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link btn btn-outline-secondary fs-5" href="#" @click.prevent="abrirModalLogin">Login</a>
             </li>
@@ -196,21 +207,24 @@ function cerrarSesion() {
             </li>
           </ul>
         </div>
-        <div v-if="usuarioAutenticado" class="col-3 mt-4 d-none d-lg-block mb-4 ms-5 ps-5">
+
+
+        <div v-if="usuarioAutenticado" class="d-none d-lg-block me-5">
           <h6 class="d-block text-center fs-5">
             Bienvenid@, {{ usuarioAutenticado?.usuario }}
           </h6>
-          
         </div>
-        <div v-else class="col-3 mt-4 d-none d-lg-block mb-4 ms-5">
-          <h6 class="d-block text-center">
-            
+        <div v-else class="d-none d-lg-block">
+          <h6 class="d-block text-center fs-5 ms-5 ps-5">
+
           </h6>
-          
         </div>
+
       </div>
     </nav>
   </header>
+
+
 
   <!-- Modal de Login -->
   <div ref="modalLogin" class="modal fade" tabindex="-1" aria-hidden="true">
@@ -282,5 +296,12 @@ function cerrarSesion() {
 <style scoped>
 h1 {
   cursor: pointer;
+}
+
+.active {
+  background-color: transparent;
+  color: rgb(0, 0, 0) !important;
+  font-weight: bold;
+  border: 1px solid grey;
 }
 </style>

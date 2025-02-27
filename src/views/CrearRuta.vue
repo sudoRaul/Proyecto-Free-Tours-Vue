@@ -164,33 +164,33 @@ async function enviarFormulario() {
       <h2 class="mb-3 text-center">Formulario de Tour</h2>
       <form @submit.prevent="enviarFormulario">
         <div class="mb-3">
-          <label for="titulo" class="form-label">Título *</label>
+          <label for="titulo" class="form-label fs-4">Título *</label>
           <input aria-required="true" type="text" id="titulo" class="form-control" placeholder="Ej: Mar de olivos" v-model="formData.titulo"  />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="localidad">Localidad *</label>
+          <label class="form-label fs-4" for="localidad">Localidad *</label>
           <input aria-required="true" type="text" id="localidad" class="form-control" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"/>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="description">Descripción *</label>
+          <label class="form-label fs-4" for="description">Descripción *</label>
           <textarea class="form-control" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" rows="3"
             v-model="formData.descripcion"></textarea>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="foto">Foto *</label>
+          <label class="form-label fs-4" for="foto">Foto *</label>
           <input type="text" aria-required="true" id="foto" class="form-control" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="fecha">Fecha *</label>
+          <label class="form-label fs-4" for="fecha">Fecha *</label>
           <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control" v-model="formData.fecha" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="hora">Hora *</label>
+          <label class="form-label fs-4" for="hora">Hora *</label>
           <select class="form-select" id="hora" v-model="formData.hora">
             <option value="" disabled>Seleccione una hora</option>
             <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
@@ -198,20 +198,20 @@ async function enviarFormulario() {
         </div>
 
         <!--<div class="mb-3">
-          <label class="form-label">Latitud</label>
+          <label class="form-label fs-4">Latitud</label>
           <input type="text" class="form-control" placeholder="Latitud del punto de encuentro" v-model="formData.latitud" required />
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Longitud</label>
+          <label class="form-label fs-4">Longitud</label>
           <input type="text" class="form-control" placeholder="Longitud del punto de encuentro" v-model="formData.longitud" required />
         </div>
         <div class="mb-3">
-          <label class="form-label" for="idGuia">Id del guía</label>
+          <label class="form-label fs-4" for="idGuia">Id del guía</label>
           <input @click.prevent="filtrarGuias" type="number" id="idGuia" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
         </div> -->
         <div class="mb-3">
-          <label class="form-label" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
+          <label class="form-label fs-4" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
           <select id="guia" class="form-control" @click="comprobarGuias" v-model="formData.guia">
             <option value="" disabled>Seleccione el id del guia</option>
             <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
@@ -219,16 +219,19 @@ async function enviarFormulario() {
         </div> 
 
         <div class="mb-4">
-          <label class="form-label" for="punto">Punto de encuentro *</label>
+          <label class="form-label fs-4" for="punto">Punto de encuentro *</label>
           <input v-model="address" aria-required="true" id="punto" placeholder="Ej: Calle Fuentebuena, 23" class="form-control" />
           <input type="button" aria-level="Buscar ubicación" @click.prevent="searchLocation" value="Buscar Ubicación" class="mb-3 mt-3 btn btn-info">
           <div id="map" style="height: 200px;"></div>
         </div>
+        <p title="Campos Obligatorios" class="text-danger">Los campos marcados con un * son obligatorios</p>
+        <br>
 
 
-        <button type="submit" aria-label="Envío formulario ruta" class="btn btn-primary w-100">Enviar formulario de ruta</button>
+        <button type="submit" aria-label="Envío formulario ruta" class="btn btn-primary w-100 mt-1">Enviar formulario de ruta</button>
       </form>
     </div>
+    
   </div>
 </template>
 
@@ -246,5 +249,8 @@ async function enviarFormulario() {
 
 .btn-primary:hover {
   background: #218838;
+}
+input::placeholder, textarea::placeholder{
+  font-size: 17px;
 }
 </style>

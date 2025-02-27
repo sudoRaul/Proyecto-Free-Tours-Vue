@@ -46,7 +46,7 @@ async function guardarValoracion(ruta) {
       },
       body: JSON.stringify({
         user_id: ruta.cliente_id,
-        ruta_id: ruta.ruta_id,
+        ruta_id: ruta.ruta_id,  
         estrellas: ruta.valoracion,
         comentario: ruta.comentario || "",
       }),

@@ -1,35 +1,36 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Swal from "sweetalert2";
 
 const usuarios = ref([]);
 const rolesDisponibles = ["admin", "guia", "cliente"];
 
-// Obtenenemos los usuarios
+// Paginación
+const usuariosPorPagina = 5;
+const paginaActual = ref(1);
+
+// Obtener usuarios
 async function obtenerUsuarios() {
   try {
     const response = await fetch("http://localhost/APIFreetours/api.php/usuarios");
     if (!response.ok) throw new Error("Error al obtener los usuarios");
     usuarios.value = await response.json();
   } catch (err) {
-    error.value = err.message;
+    console.error(err.message);
   }
 }
 
-// Actualizamos el rol del usuario
+// Actualizar rol
 async function actualizarRol(usuarioId, nuevoRol) {
   try {
     const response = await fetch(`http://localhost/APIFreetours/api.php/usuarios?id=${usuarioId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rol: nuevoRol }),
     });
 
     if (!response.ok) throw new Error("Error al actualizar el rol");
 
-    // Mostramos un mensaje de éxito
     Swal.fire({
       icon: "success",
       title: "Rol actualizado",
@@ -38,21 +39,14 @@ async function actualizarRol(usuarioId, nuevoRol) {
       showConfirmButton: false,
     });
 
-    // Recargamos usuarios para mostrar los cambios
     obtenerUsuarios();
   } catch (err) {
-    error.value = err.message;
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.message,
-    });
+    console.error(err.message);
   }
 }
 
-// Eliminamos un usuario 
+// Eliminar usuario
 async function eliminarUsuario(usuarioId) {
-  //Preguntamos si está seguro de eliminar el usuario
   const confirmacion = await Swal.fire({
     title: "¿Estás seguro?",
     text: "Esta acción no se puede deshacer",
@@ -72,7 +66,6 @@ async function eliminarUsuario(usuarioId) {
 
       if (!response.ok) throw new Error("Error al eliminar el usuario");
 
-      // Mostramos un mensaje de éxito
       Swal.fire({
         icon: "success",
         title: "Usuario eliminado",
@@ -81,52 +74,77 @@ async function eliminarUsuario(usuarioId) {
         showConfirmButton: false,
       });
 
-      // Recargamos para actualizar los usuarios
       obtenerUsuarios();
     } catch (err) {
-      error.value = err.message;
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.message,
-      });
+      console.error(err.message);
     }
   }
 }
 
-// Cargamos los usuarios al montar el componente
+//Cogemos el número total de páginas dividiendo el total de usuarios entre los usuarios por pagina
+const totalPaginas = computed(() => Math.ceil(usuarios.value.length / usuariosPorPagina));
+
+const usuariosPaginados = computed(() => {
+  const inicio = (paginaActual.value - 1) * usuariosPorPagina;
+  return usuarios.value.slice(inicio, inicio + usuariosPorPagina);
+});
+
+// Cambiar de página
+function cambiarPagina(nuevaPagina) {
+  if (nuevaPagina > 0 && nuevaPagina <= totalPaginas.value) {
+    paginaActual.value = nuevaPagina;
+  }
+}
+
+// Cargar usuarios al montar el componente
 onMounted(obtenerUsuarios);
 </script>
 
 <template>
   <div>
-    <h2 class="text-center mt-5 mb-4">Gestión de Usuarios</h2>
+    <h2 class="text-center mt-5 mb-4 fs-1">Gestión de Usuarios</h2>
+
     <table class="table table-striped mb-5 mt-3">
       <thead>
-        <tr class="text-center">
-          <th scope:col id="id" scope="col">ID</th>
-          <th scope:col id="name" scope="col">Nombre</th>
-          <th scope:col id="rol" scope="col">Rol</th>
-          <th scope:col id="eliminar" scope="col">Eliminar Usuario</th>
+        <tr class="text-center fs-4">
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Rol</th>
+          <th>Eliminar</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="text-center" v-for="usuario in usuarios.slice(1)" :key="usuario.id">
-          <td headers="id">{{ usuario.id }}</td>
-          <td headers="name">{{ usuario.nombre }}</td>
-          <td headers="rol">
+        <tr class="text-center fs-5" v-for="usuario in usuariosPaginados" :key="usuario.id">
+          <td>{{ usuario.id }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>
             <select v-model="usuario.rol" @change="actualizarRol(usuario.id, $event.target.value)" class="form-select">
               <option v-for="rol in rolesDisponibles" :key="rol" :value="rol">{{ rol }}</option>
             </select>
           </td>
-          <td headers="eliminar">
-            <button class="btn-delete col-7 mt-1 p-2" aria-label="Eliminar usuario"
-              @click="eliminarUsuario(usuario.id)">❌ Eliminar usuario</button>
+          <td>
+            <button class="btn-delete col-7 mt-1 p-2" @click="eliminarUsuario(usuario.id)">Eliminar</button>
           </td>
         </tr>
-
       </tbody>
     </table>
+
+    
+    <nav aria-label="Paginación de usuarios" class="mb-3 pb-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" :class="{ disabled: paginaActual === 1 }">
+          <button class="page-link" @click="cambiarPagina(paginaActual - 1)">Anterior</button>
+        </li>
+
+        <li class="page-item" v-for="pagina in totalPaginas" :key="pagina" :class="{ active: pagina === paginaActual }">
+          <button class="page-link" @click="cambiarPagina(pagina)">{{ pagina }}</button>
+        </li>
+
+        <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
+          <button class="page-link" @click="cambiarPagina(paginaActual + 1)">Siguiente</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
