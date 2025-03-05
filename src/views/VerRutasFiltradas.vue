@@ -58,10 +58,11 @@ onMounted(obtenerRutasFiltradas);
                     <h2 class="text-center">{{ ruta.titulo }}</h2>
                     <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="ruta-img rounded img-fluid">
                     <div class="row">
-                        <p class="text-gray-700 font-semibold col-6 fs-5">📅 {{ ruta.fecha }}</p>
-                        <p class="text-gray-700 font-semibold col-6 fs-5">⌚ {{ ruta.hora }}</p>
-                        <p class="text-gray-500 col-12 fs-5">📍 {{ ruta.localidad }}</p>
-                        <button class="btn btn-info mt-2 w-100">Ver Detalles</button>
+                        <p class="text-gray-700 font-semibold col-6 fs-5  mt-4">📅 {{ ruta.fecha }}</p>
+                        <p class="text-gray-700 font-semibold col-6 fs-5 rounded mt-4">⌚ {{ ruta.hora }}</p>
+                        <hr>
+                        <p class="text-gray-500 col-3 fs-5 rounded text-cent mt-3">📍 {{ ruta.localidad }}</p>
+                        <button class="btn btn-info mt-2 w-100 fs-4"><strong>Ver Detalles</strong></button>
                     </div>
                 </div>
             </router-link>

@@ -124,8 +124,8 @@ onMounted(obtenerInfo);
         <p class="fs-5"><strong>📍 Localidad:</strong> {{ infoRuta.localidad }}</p>
         <p class="fs-5"><strong>⌚ Horario:</strong> {{ infoRuta.hora }}</p>
         <button v-if="isReservado" class="btn btn-primary" @click="volverReservas">Volver a Reservas</button>
-        <button v-else-if="cliente_id" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservaModal">Reservar ruta</button>
-        <button v-else class="btn btn-primary" @click="comprobarLogin">Reservar ruta</button>
+        <button v-else-if="cliente_id" class="btn btn-primary fs-4 mt-3" data-bs-toggle="modal" data-bs-target="#reservaModal"><strong>Reservar Ruta</strong></button>
+        <button v-else class="btn btn-primary fs-4" @click="comprobarLogin"><strong>Reservar Ruta</strong></button>
 
       </div>
     </div>
@@ -133,7 +133,7 @@ onMounted(obtenerInfo);
     <div class="col-lg-12 mb-5 container-fluid h-100">
       <br>
       <a :href="`https://www.google.com/maps?q=${infoRuta.latitud},${infoRuta.longitud}`" target="_blank"
-        class="btn btn-success text-center regular-button">
+        class="btn btn-success text-center regular-button fs-5">
         📍 Ver en Google Maps
       </a>
       <div id="map" class="map-container mb-5 shadow"></div>

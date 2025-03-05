@@ -91,19 +91,31 @@ function inicializarMapas() {
           <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="img-fluid col-md-10">
 
           <main class="col-12 row mt-3">
-            <p class="text-gray-700 font-semibold col-6 fs-5">📍 {{ ruta.ruta_localidad }}</p>
-            <p class="text-gray-700 font-semibold col-6 fs-5">📅 {{ ruta.ruta_fecha }}</p>
+            <p class="text-gray-700 font-semibold col-6 fs-5 border rounded text-center bg-success ">📍 {{
+              ruta.ruta_localidad }}</p>
+            <p class="text-gray-700 font-semibold col-6 fs-5 border rounded text-center bg-success">📅 {{
+              ruta.ruta_fecha }}</p>
           </main>
           <div class="row col-12 justify-content-around">
-            <div class="col-4">
-              <p class="font-semibold mt-3 col-12 fs-5"><strong>🧑‍🤝‍🧑 Asistentes:</strong></p>
-              <ul class="col-3">
-                <li v-for="reserva in ruta.reservas" :key="reserva.reserva_id" class="fs-5">
-                  {{ reserva.cliente.nombre }}
-                </li>
-              </ul>
+            <div class="col-4 border rounded">
+              <p class="font-semibold mt-3 col-12 fs-5 text-center"><strong>🧑‍🤝‍🧑 Asistentes</strong></p>
+              <table class="table col-12">
+                <thead>
+                  <tr>
+                    <th class="fs-6 text-center">Nombre</th>
+                    <th class="fs-6 text-center">Nº Asistentes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="reserva in ruta.reservas" :key="reserva.reserva_id">
+                    <td class="text-center">{{ reserva.cliente.nombre }}</td>
+                    <td class="text-center">{{ reserva.num_personas }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
             </div>
-            <div :id="'map-' + ruta.ruta_id" class="map-container mb-5 shadow col-md-6"></div>
+            <div :id="'map-' + ruta.ruta_id" class="map-container mb-5 shadow col-md-5 mt-4 "></div>
           </div>
         </div>
       </div>
@@ -131,6 +143,7 @@ function inicializarMapas() {
 
 <style scoped>
 .tarjeta {
+  background: linear-gradient(180deg, rgba(231, 255, 216, 0.8) 0%, rgba(227, 238, 229, 0.8), rgba(233, 240, 236, 0.8) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -152,5 +165,11 @@ li {
 
 nav>ul>li {
   list-style-type: none;
+}
+td, th{
+  background-color: transparent;
+}
+tr:hover{
+  background-color: #c3edfa;
 }
 </style>
