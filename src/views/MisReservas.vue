@@ -173,9 +173,9 @@ onMounted(obtenerRutas);
         </div>
       </div>
     </div>
-    <h2 class="text-center mt-4">Rutas Pasadas</h2>
+    <h2 class="text-center mt-4" v-if="listaRutasPasadas.length">Rutas Pasadas</h2>
     <hr>
-    <div class="tarjetas" v-if="listaRutasPasadas.length">
+    <div class="tarjetas">
       <div v-for="ruta in listaRutasPasadas" :key="ruta.ruta_id" class="tarjeta">
         <h3>{{ ruta.ruta_titulo }}</h3>
         <p class="fs-5">📅 {{ ruta.ruta_fecha }} - 🏙️ {{ ruta.ruta_localidad }}</p>
