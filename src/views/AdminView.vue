@@ -1,9 +1,19 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import Swal from "sweetalert2";
+import router from "@/router";
+
 
 const usuarios = ref([]);
 const rolesDisponibles = ["admin", "guia", "cliente"];
+
+const sesion = localStorage.getItem("sesion");
+const rol = sesion ? JSON.parse(sesion).rol : null;
+
+// Redirección si no es guía
+if (rol !== "admin") {
+  router.push("/");
+}
 
 // Paginación
 const usuariosPorPagina = 5;
@@ -161,4 +171,5 @@ onMounted(obtenerUsuarios);
 .btn-delete:hover {
   background-color: #cc0000;
 }
+
 </style>

@@ -48,6 +48,17 @@ async function reservarRuta() {
 
   if (!email) {
     Swal.fire("Error", "No se pudo obtener el email del usuario. Inicia sesión nuevamente.", "error");
+    numPersonas.value = 1;
+    return;
+  }
+  if(numPersonas.value < 1){
+    Swal.fire("Atención", "Por favor, ingrese un número entre 1 y 8", "warning");
+    numPersonas.value = 1;
+    return;
+  }
+  if(numPersonas.value > 8){
+    Swal.fire("Atención", "El número máximo de asistentes por cada reserva es de 8 personas, inténtelo de nuevo", "warning");
+    numPersonas.value = 1;
     return;
   }
 
@@ -70,6 +81,7 @@ async function reservarRuta() {
 
     if (response.ok) {
       Swal.fire("¡Reserva realizada!", "Tu reserva ha sido confirmada.", "success");
+      router.push('/mis-reservas')
     } else {
       Swal.fire("Error", data.message || "No se pudo realizar la reserva. Inténtalo de nuevo.", "error");
     }
@@ -137,8 +149,8 @@ onMounted(obtenerInfo);
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <label for="numPersonas" class="form-label">Número de personas (máx. 4):</label>
-          <input type="number" id="numPersonas" v-model="numPersonas" class="form-control" min="1" max="4">
+          <label for="numPersonas" class="form-label">Número de personas (máx. 8):</label>
+          <input type="number" id="numPersonas" v-model="numPersonas" class="form-control" min="1" max="8" placeholder="Ingrese el número de asistentes">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -166,5 +178,9 @@ button {
   width: 100%;
   border-radius: 10px;
   margin-top: 20px;
+}
+.btn-close{
+  margin-left: 30px;
+  margin-right: -75px;
 }
 </style>

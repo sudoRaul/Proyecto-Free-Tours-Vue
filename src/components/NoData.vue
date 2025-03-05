@@ -1,3 +1,29 @@
+<script setup>
+import { defineProps } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+// Definimos las props para personalizar el componente
+defineProps({
+  mensaje: String,
+  submensaje: String,
+  mostrarBoton: {
+    type: Boolean,
+    default: true
+  },
+  textoBoton: {
+    type: String,
+    default: "Volver al inicio"
+  },
+  destino: {
+    type: String,
+    default: "/"
+  }
+});
+</script>
+
+
 <template>
     <div class="no-data-container text-center">
         <h2 class="mt-3">¡Ups! Algo inesperado ocurrió</h2>
@@ -10,30 +36,7 @@
     </div>
   </template>
   
-  <script setup>
-  import { defineProps } from "vue";
-  import { useRouter } from "vue-router";
-  
-  const router = useRouter();
-  
-  // Definimos las props para personalizar el componente
-  defineProps({
-    mensaje: String,
-    submensaje: String,
-    mostrarBoton: {
-      type: Boolean,
-      default: true
-    },
-    textoBoton: {
-      type: String,
-      default: "Volver al inicio"
-    },
-    destino: {
-      type: String,
-      default: "/"
-    }
-  });
-  </script>
+ 
   
   <style scoped>
   .no-data-container {

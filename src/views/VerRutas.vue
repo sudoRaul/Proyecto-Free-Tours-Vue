@@ -1,20 +1,46 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
 import router from "@/router";
 
 const sesion = localStorage.getItem("sesion");
-const cliente_id = sesion ? JSON.parse(sesion).id : null;
+const rol = sesion ? JSON.parse(sesion).rol : null;
 
+// Redirección si no es guía
+if (rol !== "admin") {
+  router.push("/");
+}
 // Almacenamos la lista de rutas
 const listaRutas = ref([]);
 const error = ref(null);
 
+
+const currentPage = ref(1); // Página actual
+const itemsPerPage = 4; // Número de rutas por página
+const totalPages = computed(() => Math.ceil(listaRutas.value.length / itemsPerPage));
+
+
+// Obtener las rutas para la página actual
+const paginatedRutas = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    return listaRutas.value.slice(start, start + itemsPerPage);
+});
+
+// Cambiar de página
+function cambiarPagina(pagina) {
+    if (pagina >= 1 && pagina <= totalPages.value) {
+        currentPage.value = pagina;
+    }
+}
+
 // Datos para duplicar ruta
 const fechaSeleccionada = ref("");
 const guiasDisponibles = ref([]);
-const horasDisponibles = ref([]);
+const horasDisponibles = ref([
+    "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
+    "16:00", "17:00", "18:00", "19:00", "20:00"
+]);
 const guiaSeleccionado = ref("");
 const horaSeleccionada = ref("");
 const rutaAduplicar = ref(null);
@@ -24,7 +50,7 @@ async function obtenerRutas() {
     try {
         const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
         if (!response.ok) throw new Error("Error al obtener las rutas");
-        
+
         const data = await response.json();
         listaRutas.value = data;
     } catch (err) {
@@ -53,7 +79,7 @@ async function eliminarRuta(id) {
         });
 
         if (!response.ok) throw new Error("Error al eliminar la ruta");
-        
+
         obtenerRutas();
         Swal.fire("¡Eliminado!", "La ruta ha sido eliminada correctamente.", "success");
     } catch (err) {
@@ -67,45 +93,51 @@ function abrirModalDuplicar(ruta) {
     rutaAduplicar.value = ruta;
     fechaSeleccionada.value = "";
     guiasDisponibles.value = [];
-    horasDisponibles.value = [];
     guiaSeleccionado.value = "";
     horaSeleccionada.value = "";
     new bootstrap.Modal(document.getElementById("modalDuplicarRuta")).show();
 }
 
-// Obtener guías y horarios cuando se seleccione la fecha
-async function obtenerGuiasYhorarios() {
-    if (!fechaSeleccionada.value) {
-        Swal.fire("Error", "Debes seleccionar una fecha", "error");
-        return;
-    }
-
+// Obtener guías disponibles cuando se seleccione la fecha
+async function filtrarGuias() {
+    if (!fechaSeleccionada.value) return;
     try {
-        const response = await fetch(`http://localhost/APIFreetours/api.php/guias?fecha=${fechaSeleccionada.value}`);
-        if (!response.ok) throw new Error("Error al obtener los guías");
-
+        const response = await fetch(`http://localhost/APIFreetours/api.php/asignaciones?fecha=${fechaSeleccionada.value}`);
         const data = await response.json();
-        guiasDisponibles.value = data.guias;
-        horasDisponibles.value = data.horas;
+        guiasDisponibles.value = data;
     } catch (err) {
         error.value = err.message;
-        Swal.fire("Error", "No se pudieron cargar los guías y horarios", "error");
+    }
+}
+
+function comprobarGuias() {
+    if (!fechaSeleccionada.value) {
+        Swal.fire({
+            icon: "warning",
+            title: "Atención",
+            text: "Por favor, seleccione una fecha antes de buscar."
+        });
+        return;
     }
 }
 
 // Función para duplicar la ruta
 async function duplicarRuta() {
-    if (!fechaSeleccionada.value || !guiaSeleccionado.value || !horaSeleccionada.value) {
-        Swal.fire("Error", "Todos los campos son obligatorios", "error");
+    if (!rutaAduplicar.value || !fechaSeleccionada.value || !guiaSeleccionado.value || !horaSeleccionada.value) {
+        Swal.fire("Error", "Debe completar todos los campos antes de duplicar.", "error");
         return;
     }
 
     const nuevaRuta = {
-        nombre: rutaAduplicar.value.nombre,
-        fecha: fechaSeleccionada.value,
+        titulo: rutaAduplicar.value.titulo,
+        localidad: rutaAduplicar.value.localidad,
+        descripcion: rutaAduplicar.value.descripcion,
         guia_id: guiaSeleccionado.value,
+        fecha: fechaSeleccionada.value,
         hora: horaSeleccionada.value,
-        foto: rutaAduplicar.value.foto
+        foto: rutaAduplicar.value.foto,
+        latitud: rutaAduplicar.value.latitud,
+        longitud: rutaAduplicar.value.longitud
     };
 
     try {
@@ -126,7 +158,7 @@ async function duplicarRuta() {
     }
 }
 
-// Cargar rutas al iniciar
+// Cargamos las rutas al iniciar
 onMounted(obtenerRutas);
 </script>
 
@@ -136,9 +168,10 @@ onMounted(obtenerRutas);
         <p v-if="error" class="text-red-500">{{ error }}</p>
 
         <div class="row">
-            <div v-for="ruta in listaRutas" :key="ruta.id" class="col-md-6 mb-4">
+            <div v-for="ruta in paginatedRutas" :key="ruta.id" class="col-md-6 mb-4">
                 <div class="tarjeta bg-white shadow rounded p-4">
-                    <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta" class="ruta-img rounded img-fluid">
+                    <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta"
+                        class="ruta-img rounded img-fluid">
                     <main>
                         <p class="text-gray-700 font-semibold">📅 {{ ruta.fecha }}</p>
                         <p class="text-gray-500">👤 Guía: {{ ruta.guia_nombre }}</p>
@@ -148,6 +181,21 @@ onMounted(obtenerRutas);
                 </div>
             </div>
         </div>
+        <nav v-if="totalPages > 1" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="cambiarPagina(currentPage - 1)">Anterior</button>
+                </li>
+
+                <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                    <button class="page-link" @click="cambiarPagina(page)">{{ page }}</button>
+                </li>
+
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <button class="page-link" @click="cambiarPagina(currentPage + 1)">Siguiente</button>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <!-- Modal Bootstrap -->
@@ -159,16 +207,19 @@ onMounted(obtenerRutas);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <label>Selecciona Fecha:</label>
-                    <input type="date" v-model="fechaSeleccionada" class="form-control mb-2" @change="obtenerGuiasYhorarios">
-                    
-                    <label>Selecciona Guía:</label>
-                    <select v-model="guiaSeleccionado" class="form-control mb-2">
-                        <option v-for="guia in guiasDisponibles" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
+                    <label class="form-label fs-4">Selecciona Fecha:</label>
+                    <input type="date" v-model="fechaSeleccionada" class="form-control mb-2" @change="filtrarGuias">
+
+                    <label class="form-label fs-4" for="guia">Seleccione un guía disponible*</label>
+                    <select id="guia" class="form-control" @click="comprobarGuias" v-model="guiaSeleccionado">
+                        <option value="" disabled>Seleccione un guía</option>
+                        <option v-for="guia in guiasDisponibles" :key="guia.id" :value="guia.id">{{ guia.nombre }}
+                        </option>
                     </select>
 
-                    <label>Selecciona Hora:</label>
+                    <label class="form-label fs-4">Selecciona Hora:</label>
                     <select v-model="horaSeleccionada" class="form-control">
+                        <option value="" disabled>Seleccione una hora</option>
                         <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
                     </select>
                 </div>

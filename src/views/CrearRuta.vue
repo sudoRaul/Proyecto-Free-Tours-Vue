@@ -5,6 +5,14 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import router from "@/router";
 
+const sesion = localStorage.getItem("sesion");
+const rol = sesion ? JSON.parse(sesion).rol : null;
+
+// Redirección si no es guía
+if (rol !== "admin") {
+  router.push("/");
+}
+
 
 
 //Inicializamos la lista de los guias
@@ -75,7 +83,7 @@ async function filtrarGuias() {
     const response = await fetch(`http://localhost/APIFreetours/api.php/asignaciones?fecha=${formData.value.fecha}`)
     const data = await response.json();
     listaGuias.value = data;
-    console.log(listaGuias.value)
+    //console.log(listaGuias.value)
   }catch(err){
     err.message
   }
@@ -159,98 +167,95 @@ async function enviarFormulario() {
 </script>
 
 <template>
-  <div class="container mt-4">
-    <div class="card p-4 shadow mb-5">
-      <h2 class="mb-3 text-center">Formulario de Tour</h2>
+  <div class="container mt-5">
+    <div class="card p-4 shadow-lg mb-5 border-0">
+      <h2 class="mb-4 text-center text-primary">Formulario de Tour</h2>
       <form @submit.prevent="enviarFormulario">
-        <div class="mb-3">
-          <label for="titulo" class="form-label fs-4">Título *</label>
-          <input aria-required="true" type="text" id="titulo" class="form-control" placeholder="Ej: Mar de olivos" v-model="formData.titulo"  />
+
+        <div class="form-floating mb-4">
+          <input aria-required="true" type="text" id="titulo" class="form-control form-control-lg shadow-sm pt-5 pb-3 pt-5 pb-3" placeholder="Ej: Mar de olivos" v-model="formData.titulo" />
+          <label for="titulo" class="form-label fs-5 text-secondary">Título <span class="text-danger">*</span></label>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fs-4" for="localidad">Localidad *</label>
-          <input aria-required="true" type="text" id="localidad" class="form-control" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"/>
+        <div class="form-floating mb-4">
+          <input aria-required="true" type="text" id="localidad" class="form-control form-control-lg shadow-sm pt-5 pb-3" placeholder="Ej: Arroyo del Ojanco" v-model="formData.localidad"/>
+          <label for="localidad" class="form-label fs-5 text-secondary">Localidad <span class="text-danger">*</span></label>
+
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fs-4" for="description">Descripción *</label>
-          <textarea class="form-control" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" rows="3"
-            v-model="formData.descripcion"></textarea>
+        <div class="form-floating mb-4">
+          <textarea class="form-control form-control-lg shadow-sm pt-5 pb-3" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" v-model="formData.descripcion"></textarea>
+          <label for="description" class="form-label fs-5 text-secondary">Descripción <span class="text-danger">*</span></label>
+
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fs-4" for="foto">Foto *</label>
-          <input type="text" aria-required="true" id="foto" class="form-control" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" />
+        <div class="form-floating mb-4">
+          <input type="text" aria-required="true" id="foto" class="form-control form-control-lg shadow-sm pt-5 pb-3" placeholder="Ej: https://olivosJaen.png" v-model="formData.foto" />
+          <label for="foto" class="form-label fs-5 text-secondary">Foto <span class="text-danger">*</span></label>
+
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fs-4" for="fecha">Fecha *</label>
-          <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control" v-model="formData.fecha" />
+        <div class="mb-4">
+          <label for="fecha" class="form-label fs-5 text-secondary">Fecha <span class="text-danger">*</span></label>
+          <input type="date" id="fecha" aria-required="true" @change="filtrarGuias" :min="fechaHoy" class="form-control form-control-lg shadow-sm" v-model="formData.fecha" />
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fs-4" for="hora">Hora *</label>
-          <select class="form-select" id="hora" v-model="formData.hora">
+        <div class="mb-4">
+          <label for="hora" class="form-label fs-5 text-secondary">Hora <span class="text-danger">*</span></label>
+          <select class="form-select form-select-lg shadow-sm" id="hora" v-model="formData.hora">
             <option value="" disabled>Seleccione una hora</option>
             <option v-for="hora in horasDisponibles" :key="hora" :value="hora">{{ hora }}</option>
           </select>
         </div>
 
-        <!--<div class="mb-3">
-          <label class="form-label fs-4">Latitud</label>
-          <input type="text" class="form-control" placeholder="Latitud del punto de encuentro" v-model="formData.latitud" required />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fs-4">Longitud</label>
-          <input type="text" class="form-control" placeholder="Longitud del punto de encuentro" v-model="formData.longitud" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label fs-4" for="idGuia">Id del guía</label>
-          <input @click.prevent="filtrarGuias" type="number" id="idGuia" class="form-control" placeholder="Id del guía asignado" v-model="formData.guia" required />
-        </div> -->
-        <div class="mb-3">
-          <label class="form-label fs-4" for="guia">Introduzca una fecha antes de buscar guia disponible *</label>
-          <select id="guia" class="form-control" @click="comprobarGuias" v-model="formData.guia">
-            <option value="" disabled>Seleccione el id del guia</option>
+        <div class="mb-4">
+          <label for="guia" class="form-label fs-5 text-secondary">Guía <span class="text-danger">*</span></label>
+          <select id="guia" class="form-select form-select-lg shadow-sm" @click="comprobarGuias" v-model="formData.guia">
+            <option value="" disabled>Seleccione el guía</option>
             <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
           </select>
         </div> 
 
-        <div class="mb-4">
-          <label class="form-label fs-4" for="punto">Punto de encuentro *</label>
-          <input v-model="address" aria-required="true" id="punto" placeholder="Ej: Calle Fuentebuena, 23" class="form-control" />
-          <input type="button" aria-level="Buscar ubicación" @click.prevent="searchLocation" value="Buscar Ubicación" class="mb-3 mt-3 btn btn-info">
-          <div id="map" style="height: 200px;"></div>
+        <div class="form-floating mb-4">
+          <input v-model="address" aria-required="true" id="punto" placeholder="Ej: Calle Fuentebuena, 23" class="form-control form-control-lg shadow-sm pt-5 pb-3" />
+          <label for="punto" class="form-label fs-5 text-secondary">Punto de Encuentro <span class="text-danger">*</span></label>
+          <input type="button" aria-label="Buscar ubicación" @click.prevent="searchLocation" value="Buscar Ubicación" class="btn btn-info w-100 mt-3">
+          <div id="map" style="height: 300px;" class="mt-3 rounded"></div>
         </div>
-        <p title="Campos Obligatorios" class="text-danger">Los campos marcados con un * son obligatorios</p>
-        <br>
 
+        <p class="text-center text-muted">Los campos marcados con un <span class="text-danger">*</span> son obligatorios</p>
 
-        <button type="submit" aria-label="Envío formulario ruta" class="btn btn-primary w-100 mt-1">Enviar formulario de ruta</button>
+        
+        <button type="submit" aria-label="Envío formulario ruta" class="btn btn-primary w-100 mt-3 py-3 fs-5"><strong>Enviar formulario de ruta</strong></button>
       </form>
     </div>
-    
   </div>
 </template>
-
 <style scoped>
-.card {
-  max-width: 650px;
-  margin: auto;
+form {
+  background: linear-gradient(135deg, #f3e7e9, #e3eeff);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-control, .form-select {
   border-radius: 10px;
+  border: none;
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: 0px 0px 10px rgba(142, 45, 226, 0.5);
 }
 
 .btn-primary {
-  background: #28a745;
+  background: linear-gradient(135deg, #56d5ee, #8549fc);
   border: none;
+  transition: all 0.3s ease-in-out;
 }
-
 .btn-primary:hover {
-  background: #218838;
-}
-input::placeholder, textarea::placeholder{
-  font-size: 17px;
+  background: rgb(61, 61, 252);
 }
 </style>
+
