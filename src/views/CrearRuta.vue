@@ -184,7 +184,7 @@ async function enviarFormulario() {
         </div>
 
         <div class="form-floating mb-4">
-          <textarea class="form-control form-control-lg shadow-sm pt-5 pb-3" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" v-model="formData.descripcion"></textarea>
+          <textarea class="form-control form-control-lg shadow-sm pt-5  pb-3" aria-required="true" id="description" placeholder="Ej: Ruta a pie por la profundidad de los olivos" v-model="formData.descripcion"></textarea>
           <label for="description" class="form-label fs-5 text-secondary">Descripción <span class="text-danger">*</span></label>
 
         </div>

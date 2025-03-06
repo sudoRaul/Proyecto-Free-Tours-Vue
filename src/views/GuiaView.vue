@@ -153,7 +153,7 @@ function inicializarMapas() {
 
             <div class="col-md-4 col-sm-12 col-md-12 border rounded">
               <p class="font-semibold mt-3 col-12 fs-5 text-center"><strong>🧑‍🤝‍🧑 Asistentes</strong></p>
-              <table class="table col-12">
+              <table class="table col-12 table-hover">
                 <thead>
                   <tr>
                     <th class="fs-6 text-center">Nombre</th>
@@ -173,7 +173,7 @@ function inicializarMapas() {
                   </tr>
                 </tbody>
               </table>
-              <!-- Modal Bootstrap -->
+
               <div class="modal fade" id="editarAsistentesModal" tabindex="-1" aria-labelledby="modalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -246,16 +246,14 @@ nav>ul>li {
   list-style-type: none;
 }
 
-td,
-th {
-  background-color: transparent;
-}
-
-tr:hover {
-  background-color: #c3edfa;
-}
-
 main>p:hover {
-  background-color: rgb(221, 212, 212);
+  background-color:  rgb(187, 255, 187);;
 }
+th{
+  background-color: rgb(96, 252, 96);
+}td{
+  background-color: rgb(216, 250, 216);
+}
+
+
 </style>

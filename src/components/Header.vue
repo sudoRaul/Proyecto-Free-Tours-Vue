@@ -14,6 +14,8 @@ const props = defineProps({
   datosUsuario: Object
 });
 
+const contrasena = ref("")
+
 const modalLogin = ref(null);
 const modalRegistro = ref(null);
 let modalInstanceLogin = null;
@@ -40,6 +42,11 @@ function cerrarModalLogin() {
 
 // Función para mostrar el modal de registro
 function abrirModalRegistro() {
+  contrasena.value = "";
+  formRegistro.value.usuario = "";
+  formRegistro.value.email = "";
+  formRegistro.value.password = "";
+  errorRegistro.value = "";
   cerrarModalLogin();
   modalInstanceRegistro = new Modal(modalRegistro.value);
   modalInstanceRegistro.show();
@@ -47,6 +54,7 @@ function abrirModalRegistro() {
 
 // Función para cerrar el modal de registro
 function cerrarModalRegistro() {
+  
   modalInstanceRegistro.hide();
 }
 
@@ -89,6 +97,11 @@ async function registrarUsuario() {
   // Validamos que estén todos los campos en el formulario de registro
   if (!formRegistro.value.usuario || !formRegistro.value.email || !formRegistro.value.password) {
     errorRegistro.value = "Todos los campos son obligatorios";
+    return;
+  }
+
+  if(formRegistro.value.password !== contrasena.value){
+    errorRegistro.value = "Las contraseñas no coinciden";
     return;
   }
 
@@ -236,13 +249,14 @@ function toggleMenu(){
         <div class="modal-body">
           <form @submit.prevent="iniciarSesion">
             <div class="mb-3">
-              <label class="form-label">Usuario</label>
-              <input type="text" v-model="form.usuario" class="form-control" placeholder="Ingrese su usuario" />
+              <label class="form-label">Email</label>
+              <input type="text" v-model="form.usuario" class="form-control" placeholder="Ingrese su email" />
             </div>
             <div class="mb-3">
               <label class="form-label">Contraseña</label>
               <input type="password" v-model="form.password" class="form-control" placeholder="Ingrese su contraseña" />
             </div>
+            
             <p v-if="errorLogin" class="text-danger mt-2">{{ errorLogin }}</p>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -280,6 +294,10 @@ function toggleMenu(){
               <label class="form-label">Contraseña</label>
               <input type="password" v-model="formRegistro.password" class="form-control"
                 placeholder="Ingrese una contraseña" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Repetir Contraseña</label>
+              <input type="password" v-model="contrasena" class="form-control" placeholder="Ingrese su contraseña" />
             </div>
             <p v-if="errorRegistro" class="text-danger mt-2">{{ errorRegistro }}</p>
             <div class="modal-footer">

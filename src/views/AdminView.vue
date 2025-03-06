@@ -114,7 +114,7 @@ onMounted(obtenerUsuarios);
   <div>
     <h2 class="text-center mt-5 mb-4 fs-1">Gestión de Usuarios</h2>
 
-    <table class="table table-striped mb-5 mt-3">
+    <table class="table table-striped table-hover mb-5 mt-3">
       <thead>
         <tr class="text-center fs-4">
           <th>ID</th>
@@ -171,5 +171,6 @@ onMounted(obtenerUsuarios);
 .btn-delete:hover {
   background-color: #cc0000;
 }
+
 
 </style>

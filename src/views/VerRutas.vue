@@ -15,6 +15,8 @@ if (rol !== "admin") {
 const listaRutas = ref([]);
 const error = ref(null);
 
+const fechaHoy = new Date().toISOString().split("T")[0];
+
 
 const currentPage = ref(1); // Página actual
 const itemsPerPage = 4; // Número de rutas por página
@@ -174,10 +176,10 @@ onMounted(obtenerRutas);
                     <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta"
                         class="ruta-img rounded img-fluid">
                     <main class="row mt-3">
-                        <p class="text-gray-700 fs-5 col-6 border rounded p-1">📅 {{ ruta.fecha }}</p>
-                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">👤 Guía: {{ ruta.guia_nombre }}</p>
-                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">⌚ Hora: {{ ruta.hora }}</p>
-                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">📍 Localidad: {{ ruta.localidad }}</p>
+                        <p class="text-gray-700 fs-5 col-6 border rounded p-1"><strong>📅 Fecha:</strong> {{ ruta.fecha }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1"><strong>👤 Guía:</strong> {{ ruta.guia_nombre }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1"><strong>⌚ Hora:</strong> {{ ruta.hora }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1"><strong>📍 Localidad:</strong> {{ ruta.localidad }}</p>
                         <button class="btn btn-primary m-2" @click="abrirModalDuplicar(ruta)">🔁 Duplicar</button>
                         <button class="btn btn-danger m-2" @click="eliminarRuta(ruta.id)">❌ Eliminar</button>
                     </main>
@@ -211,7 +213,7 @@ onMounted(obtenerRutas);
                 </div>
                 <div class="modal-body">
                     <label class="form-label fs-4">Selecciona Fecha:</label>
-                    <input type="date" v-model="fechaSeleccionada" class="form-control mb-2" @change="filtrarGuias">
+                    <input type="date" v-model="fechaSeleccionada" :min="fechaHoy" class="form-control mb-2" @change="filtrarGuias">
 
                     <label class="form-label fs-4" for="guia">Seleccione un guía disponible*</label>
                     <select id="guia" class="form-control" @click="comprobarGuias" v-model="guiaSeleccionado">
@@ -248,6 +250,6 @@ onMounted(obtenerRutas);
     object-fit: cover;
 }
 p:hover{
-    background-color: rgb(221, 212, 212);
+    background-color:  rgb(187, 255, 187);;
 }
 </style>
