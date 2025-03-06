@@ -61,7 +61,7 @@ onMounted(obtenerRutasFiltradas);
                         <p class="text-gray-700 font-semibold col-6 fs-5  mt-4">📅 {{ ruta.fecha }}</p>
                         <p class="text-gray-700 font-semibold col-6 fs-5 rounded mt-4">⌚ {{ ruta.hora }}</p>
                         <hr>
-                        <p class="text-gray-500 col-3 fs-5 rounded text-cent mt-3">📍 {{ ruta.localidad }}</p>
+                        <p class="text-gray-500 col-3 fs-5 rounded text-cent mt-1">📍 {{ ruta.localidad }}</p>
                         <button class="btn btn-info mt-2 w-100 fs-4"><strong>Ver Detalles</strong></button>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import GuiaView from '@/views/GuiaView.vue'
 import MisReservas from '@/views/MisReservas.vue'
 import VerRutasFiltradas from '@/views/VerRutasFiltradas.vue'
 import InfoCompletaRuta from '@/views/InfoCompletaRuta.vue'
+import RutasPasadas from '@/views/RutasPasadas.vue'
 
 
 const router = createRouter({
@@ -54,6 +55,11 @@ const router = createRouter({
       path: '/info-completa-ruta/:id/:logued?',
       name: 'info-completa-ruta',
       component: InfoCompletaRuta
+    },
+    {
+      path: '/rutas-pasadas',
+      name: 'rutas-pasadas',
+      component: RutasPasadas
     }
   ],
 })

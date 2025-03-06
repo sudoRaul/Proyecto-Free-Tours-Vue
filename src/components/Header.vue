@@ -188,6 +188,9 @@ function toggleMenu(){
               <router-link to="/mis-reservas" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Mis
                 reservas</router-link>
             </li>
+            <li v-if="usuarioAutenticado && usuarioAutenticado.rol === 'cliente'" class="nav-item">
+              <router-link to="/rutas-pasadas" class="nav-link btn btn-outline-secondary fs-5" active-class="active">Rutas pasadas</router-link>
+            </li>
 
             <li v-if="!usuarioAutenticado" class="nav-item">
               <a class="nav-link btn btn-outline-secondary fs-5" href="#topDestinos">Mejores destinos</a>

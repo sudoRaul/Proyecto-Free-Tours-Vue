@@ -170,11 +170,14 @@ onMounted(obtenerRutas);
         <div class="row">
             <div v-for="ruta in paginatedRutas" :key="ruta.id" class="col-md-6 mb-4">
                 <div class="tarjeta bg-white shadow rounded p-4">
+                    <h2>{{ ruta.titulo }}</h2>
                     <img :src="ruta.foto" title="Imagen de la ruta" alt="Imagen de la ruta"
                         class="ruta-img rounded img-fluid">
-                    <main>
-                        <p class="text-gray-700 font-semibold">📅 {{ ruta.fecha }}</p>
-                        <p class="text-gray-500">👤 Guía: {{ ruta.guia_nombre }}</p>
+                    <main class="row mt-3">
+                        <p class="text-gray-700 fs-5 col-6 border rounded p-1">📅 {{ ruta.fecha }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">👤 Guía: {{ ruta.guia_nombre }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">⌚ Hora: {{ ruta.hora }}</p>
+                        <p class="text-gray-500 fs-5 col-6 border rounded p-1">📍 Localidad: {{ ruta.localidad }}</p>
                         <button class="btn btn-primary m-2" @click="abrirModalDuplicar(ruta)">🔁 Duplicar</button>
                         <button class="btn btn-danger m-2" @click="eliminarRuta(ruta.id)">❌ Eliminar</button>
                     </main>
@@ -243,5 +246,8 @@ onMounted(obtenerRutas);
     width: 100%;
     max-height: 200px;
     object-fit: cover;
+}
+p:hover{
+    background-color: rgb(221, 212, 212);
 }
 </style>

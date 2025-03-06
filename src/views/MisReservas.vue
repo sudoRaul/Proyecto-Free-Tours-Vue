@@ -3,19 +3,17 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
-import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importar Bootstrap para manejar el modal
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js"; 
 
 const router = useRouter();
 const sesion = localStorage.getItem("sesion");
 const rol = sesion ? JSON.parse(sesion).rol : null;
-const idCliente = sesion ? JSON.parse(sesion).id : null;
 
 if (rol !== "cliente") {
   router.push("/");
 }
 
 const listaRutasFuturas = ref([]);
-const listaRutasPasadas = ref([]);
 const error = ref("");
 const emailUsuario = sesion ? JSON.parse(sesion).email: null;
 const isLogued = !!rol;
@@ -37,11 +35,6 @@ async function obtenerRutas() {
     const hoy = new Date().toISOString().split("T")[0];
 
     listaRutasFuturas.value = data.filter(ruta => ruta.ruta_fecha >= hoy);
-    listaRutasPasadas.value = data.filter(ruta => ruta.ruta_fecha < hoy).map(ruta => ({
-      ...ruta,
-      yaValorada: !!ruta.valoracion,
-      comentarioTemp: ruta.comentario || ""
-    }));
   } catch (err) {
     error.value = err.message;
   }
@@ -111,45 +104,14 @@ async function actualizarAsistentes() {
     Swal.fire("Error", err.message, "error");
   }
 }
-async function guardarValoracion(ruta) {
-  try {
-    const response = await fetch("http://localhost/APIFreetours/api.php/valoraciones", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: ruta.cliente_id,
-        ruta_id: ruta.ruta_id,
-        estrellas: ruta.valoracion,
-        comentario: ruta.comentarioTemp, // Se envía el comentario actualizado
-      }),
-    });
 
-    if (!response.ok) throw new Error("Error al guardar la valoración");
-
-    const data = await response.json();
-    if (data.status == "error") {
-      Swal.fire("Error", data.message, "error");
-      return;
-    }
-
-    // Una vez guardado, deshabilitar textarea
-    ruta.comentario = ruta.comentarioTemp;
-    ruta.yaValorada = true;
-
-    Swal.fire("Valoración guardada", "Tu valoración ha sido guardada con éxito", "success");
-  } catch (err) {
-    Swal.fire("Error", err.message, "error");
-  }
-}
 
 onMounted(obtenerRutas);
 
 </script>
 
 <template>
-  <div v-if="listaRutasFuturas.length > 0 || listaRutasPasadas.length > 0" class="container col-xs-12 mb-4">
+  <div v-if="listaRutasFuturas.length > 0" class="container col-xs-12 mb-4">
     <h1 class="text-center mb-4 mt-4">Mis Reservas</h1>
     <p v-if="error" class="text-danger">{{ error }}</p>
 
@@ -173,29 +135,7 @@ onMounted(obtenerRutas);
         </div>
       </div>
     </div>
-    <h2 class="text-center mt-4" v-if="listaRutasPasadas.length">Rutas Pasadas</h2>
-    <hr>
-    <div class="tarjetas">
-      <div v-for="ruta in listaRutasPasadas" :key="ruta.ruta_id" class="tarjeta">
-        <h3>{{ ruta.ruta_titulo }}</h3>
-        <p class="fs-5">📅 {{ ruta.ruta_fecha }} - 🏙️ {{ ruta.ruta_localidad }}</p>
-        <h3 class="mb-4">¡Cuenténos cómo fue su experiencia!</h3>
-        <div class="row">
-          <button @click="ruta.valoracion = Math.max(ruta.valoracion - 1, 1)" class="col-1 valoracion"
-            :disabled="ruta.yaValorada || ruta.valoracion === 1">-</button>
-          <span class="col-2 text-center fs-3">
-            <span v-for="n in Math.max(ruta.valoracion, 1)" :key="n" class="star">⭐</span>
-          </span>
-          <button @click="ruta.valoracion = Math.min(ruta.valoracion + 1, 5)" class="col-1 valoracion"
-            :disabled="ruta.yaValorada">+</button>
-        </div>
-        <div class="row mt-4">
-          <textarea v-model="ruta.comentarioTemp" placeholder="Añade un comentario" class="col-3"
-            :disabled="ruta.yaValorada"></textarea>
-          <button @click="guardarValoracion(ruta)" class="col-3 valoracion">Guardar</button>
-        </div>
-      </div>
-    </div>
+
   </div>
   <NoData v-else mensaje="No tienes rutas reservadas" submensaje="Reserve alguna ruta para verlas en esta sección" />
 
