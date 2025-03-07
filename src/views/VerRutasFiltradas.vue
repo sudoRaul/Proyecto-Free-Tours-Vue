@@ -5,12 +5,17 @@ import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
 
 const route = useRoute();
+//OBtenemos los parámetro necesarios para filtrar las rutas
 const localidad = ref(route.params.localidad || "");
 const fecha = ref(route.params.fecha);
+//Inicializamos la lista de rutas
 const listaRutas = ref([]);
+// Página actual
 const currentPage = ref(1);
+// Rutas por página
 const itemsPerPage = 2;
 
+// Obtenemos las rutas filtradas
 async function obtenerRutasFiltradas() {
     try {
         let url = `http://localhost/APIFreetours/api.php/rutas?fecha=${fecha.value}`;
@@ -32,18 +37,21 @@ async function obtenerRutasFiltradas() {
     }
 }
 
+// Calculaamos el total de páginas según el número de rutas y el número de rutas por página
 const totalPages = computed(() => Math.ceil(listaRutas.value.length / itemsPerPage));
 const paginatedRutas = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
     return listaRutas.value.slice(start, start + itemsPerPage);
 });
 
+// Cambiamos de página
 function changePage(page) {
     if (page >= 1 && page <= totalPages.value) {
         currentPage.value = page;
     }
 }
 
+// Cargamos las rutas
 onMounted(obtenerRutasFiltradas);
 </script>
 
@@ -68,7 +76,7 @@ onMounted(obtenerRutasFiltradas);
             </router-link>
         </div>
 
-        <!-- Paginación -->
+        
         <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{ disabled: currentPage === 1 }">

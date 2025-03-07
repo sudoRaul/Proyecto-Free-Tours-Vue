@@ -4,21 +4,22 @@
  import Swal from "sweetalert2";
   
 
-
+// Inicializamos las constantes para el formulario de búsqueda y la lista de rutas según esos criterios
 const localidad = ref("");
 const fecha = ref("")
 const listaRutas = ref([]);
 
-
+// Inicializamos los valores necesarios para los controles del video
 const video = ref(null);
 const showControls = ref(false);
 const isPlaying = ref(false);
 const isMuted = ref(false);
 const isFullscreen = ref(false);
-const speed = ref(1); // Inicializamos la velocidad del video a 1
+const speed = ref(1);
 // Necesitaremos la fecha de hoy para que se introduzca una fecha a partir de esta
 const fechaHoy = new Date().toISOString().split("T")[0];
 
+// Pausamos o iniciamos el video
 const pausePlay = () => {
   if (video.value.paused) {
     video.value.play();
@@ -29,26 +30,29 @@ const pausePlay = () => {
   }
 };
 
+// Subimos el volumen
 const volumeUp = () => {
   if (video.value.volume < 1) video.value.volume += 0.1;
 };
-
+// Bajamos el volumen
 const volumeDown = () => {
   if (video.value.volume > 0) video.value.volume -= 0.1;
 };
-
+//Aumentamos 5 segundos el vídeo
 const increaseTime = () => {
   video.value.currentTime += 5
 }
-
+//Decrementamos 5 segundos el vídeo
 const decreaseTime = () => {
   video.value.currentTime -= 5
 }
-
+// Silenciamos o activamos el sonido
 const mute = () => {
   video.value.muted = !video.value.muted;
   isMuted.value = video.value.muted;
 };
+
+// Activamos o desactivamos el modo pantalla completa
 const toggleFullscreen = () => {
   if (!document.fullscreenElement) {
     video.value.requestFullscreen?.() || video.value.webkitRequestFullscreen?.();
@@ -59,6 +63,7 @@ const toggleFullscreen = () => {
   }
 };
 
+//Aumentamos la velocidad del video
 const increaseSpeed = () => {
   if (speed.value < 2) {
     speed.value += 0.5;
@@ -68,20 +73,23 @@ const increaseSpeed = () => {
   }
 };
 
+// Obtenemos las rutas de la BBDD
 async function obtenerRutas() {
     try {
         const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
         if (!response.ok) throw new Error("Error al obtener las rutas");
         
         const data = await response.json();
-        listaRutas.value = data; // Guardamos las rutas en la variable 
+        listaRutas.value = data; 
     } catch (err) {
-        error.value = err.message;
+      Swal.fire("Error", err.message, "error");
     }
 };
 
+// Llamamos a la función para obtener las rutas
 onMounted(obtenerRutas)
 
+// Validamos el formulario de búsqueda
 const validarFormulario = () => {
   if (!fecha.value) {
     Swal.fire({
@@ -91,6 +99,7 @@ const validarFormulario = () => {
     });
     return;
   }
+  //Si pasa la validación redirigimos a la página de rutas filtradas
   router.push(`/rutas-filtradas/${fecha.value}/${localidad.value}`);
 };
 
@@ -150,7 +159,7 @@ const validarFormulario = () => {
                         </div>
                         
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <button type="button" aria-label="Buscar ruta" @click.prevent="validarFormulario" class="btn btn-primary wrn-btn">Buscar ruta</button>
+                            <button type="button" aria-label="Buscar ruta" @click.prevent="validarFormulario" class="btn btn-primary wrn-btn fs-5">Buscar ruta</button>
                         </div>
                     </div>
                 </div>
@@ -197,8 +206,8 @@ const validarFormulario = () => {
       <h2 class="text-center fw-bold mb-4">¡Sigue nuestros vídeos en nuestras plataformas!</h2>
       <div class="video-container" @mouseover="showControls = true" @mouseleave="showControls = false">
     <video ref="video" @play="isPlaying = true" @pause="isPlaying = false">
-      <source src="@/images/videoRonda.mp4" type="video/mp4" />
-      <source src="@/images/videoRondaFire.ogg" type="video/mp4"/>
+      <source src="@/images/VideoPlaya.mp4" type="video/mp4" />
+      <source src="@/images/videoPlayaFire.ogg" type="video/mp4"/>
     </video>
 
     <div class="controls" v-show="showControls">

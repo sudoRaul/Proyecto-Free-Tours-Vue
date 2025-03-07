@@ -7,33 +7,38 @@ import { Modal } from "bootstrap"; // Importamos Bootstrap para manejar el modal
 import Swal from "sweetalert2";
 
 
-
+//Inicializamos las rutas y el error
 const listaRutas = ref([]);
 const error = ref(null);
+
+// Cogemos el rol para evitar que se pueda entrar en otras vistas
 const sesion = localStorage.getItem("sesion");
 const idGuia = sesion ? JSON.parse(sesion).id : null;
 
 const rol = sesion ? JSON.parse(sesion).rol : null;
 
-// Redirección si no es guía
+// Redireccionamos a home si no es guía
 if (rol !== "guia") {
   router.push("/");
 }
 
-
+// Referencia a la reserva seleccionada con toda su información
 const reservaSeleccionada = ref(0);
 let modalInstance = null;
 
 function abrirModal(reserva) {
-  reservaSeleccionada.value = { ...reserva }; // Clonar la reserva para evitar modificaciones directas
+  // Clonamos la reserva para evitar modificaciones directas
+  reservaSeleccionada.value = { ...reserva }; 
 
-  // Inicializar el modal
+  // Inicializamos el modal de modificación de los asistentes
   if (!modalInstance) {
+    //Creamos la instancia del modal
     modalInstance = new Modal(document.getElementById("editarAsistentesModal"));
   }
+  // Mostramos el modal
   modalInstance.show();
 }
-
+// Guardamos los cambios tras editar el número de asistentes
 async function guardarCambios() {
   try {
     const response = await fetch("http://localhost/APIFreetours/api.php/reservas?id=" + reservaSeleccionada.value.reserva_id, {
@@ -48,11 +53,13 @@ async function guardarCambios() {
 
     if (!response.ok) throw new Error("Error al actualizar la reserva");
 
-    // Buscar la reserva original en la lista y actualizarla directamente
+    // Buscamos la reserva original en la lista y la actualizamos directamente
     const reservaIndex = listaRutas.value
-      .flatMap(ruta => ruta.reservas) // Asegura acceder a todas las reservas
+    // Aseguramos que se accede a todas las reservas
+      .flatMap(ruta => ruta.reservas) 
       .findIndex(r => r.reserva_id === reservaSeleccionada.value.reserva_id);
 
+    // Si se encuentra la reserva, actualizamos el número de personas
     if (reservaIndex !== -1) {
       listaRutas.value
         .flatMap(ruta => ruta.reservas)[reservaIndex].num_personas = reservaSeleccionada.value.num_personas;
@@ -60,13 +67,14 @@ async function guardarCambios() {
 
     Swal.fire("Actualizado", "El número de asistentes ha sido modificado con éxito", "success");
 
-    modalInstance.hide(); // Cerrar el modal
+    // Cerramos el modal
+    modalInstance.hide(); 
   } catch (error) {
     Swal.fire("Error", error.message, "error");
   }
 }
 
-
+// Obtenemos las rutas asignadas al guía e inicializamos el mapa
 function obtenerRutas() {
   fetch(`http://localhost/APIFreetours/api.php/asignaciones?guia_id=${idGuia}`)
     .then((response) => {
@@ -84,18 +92,22 @@ function obtenerRutas() {
     });
 }
 
+// Cargamos las rutas
 onMounted(obtenerRutas);
 
-
+// Inicializamos las constantes para la paginación
 const currentPage = ref(1);
 const itemsPerPage = 2;
+//Calculamos el total de páginas según el número de rutas y el número de rutas por página
 const totalPages = computed(() => Math.ceil(listaRutas.value.length / itemsPerPage));
 
+// Obtenemos las rutas paginadas
 const paginatedRutas = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   return listaRutas.value.slice(start, start + itemsPerPage);
 });
 
+// Cambiamos de página e inicializamos el mapa de nuevo en cada página
 function cambiarPagina(pagina) {
   if (pagina >= 1 && pagina <= totalPages.value) {
     currentPage.value = pagina;
@@ -124,7 +136,7 @@ function inicializarMapas() {
 
     L.marker([parseFloat(ruta.ruta_latitud), parseFloat(ruta.ruta_longitud)])
       .addTo(map)
-      .bindPopup(ruta.ruta_titulo)
+      .bindPopup(ruta.ruta_localidad)
       .openPopup();
   });
 }
@@ -156,18 +168,18 @@ function inicializarMapas() {
               <table class="table col-12 table-hover">
                 <thead>
                   <tr>
-                    <th class="fs-6 text-center">Nombre</th>
-                    <th class="fs-6 text-center">Nº Asistentes</th>
-                    <th class="fs-6 ">Editar</th>
+                    <th scope="col" id="nombre" class="fs-6 text-center">Nombre</th>
+                    <th scope="col" id="asistentes" class="fs-6 text-center">Nº Asistentes</th>
+                    <th scope="col" id="editar" class="fs-6">Editar</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="reserva in ruta.reservas" :key="reserva.reserva_id">
-                    <td class="text-center">{{ reserva.cliente.nombre }}</td>
-                    <td class="text-center">
+                    <td headers="nombre" class="text-center">{{ reserva.cliente.nombre }}</td>
+                    <td headers="asistentes" class="text-center">
                       {{ reserva.num_personas }}
                     </td>
-                    <td>
+                    <td headers="editar">
                       <button @click="abrirModal(reserva)" class="btn btn-sm btn-warning ms-2 text-center">✏️</button>
                     </td>
                   </tr>
@@ -230,8 +242,6 @@ function inicializarMapas() {
   padding: 15px;
   border-radius: 10px;
 }
-
-
 .map-container {
   height: 250px;
   width: 65%;
@@ -241,7 +251,6 @@ function inicializarMapas() {
 li {
   list-style-type: number;
 }
-
 nav>ul>li {
   list-style-type: none;
 }
@@ -254,6 +263,4 @@ th{
 }td{
   background-color: rgb(216, 250, 216);
 }
-
-
 </style>

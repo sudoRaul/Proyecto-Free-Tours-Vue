@@ -4,32 +4,37 @@ import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
 import router from "@/router";
 
+// Cogemos el rol para evitar que se pueda entrar en otras vistas
 const sesion = localStorage.getItem("sesion");
 const rol = sesion ? JSON.parse(sesion).rol : null;
 
-// Redirección si no es guía
+// Redirección si no es admin
 if (rol !== "admin") {
   router.push("/");
 }
-// Almacenamos la lista de rutas
+
+// Inicializamos la lista de rutas
 const listaRutas = ref([]);
 const error = ref(null);
 
+//Cogemos la fecha para que si se duplica la ruta no se pueda seleccionar una fecha anterior
 const fechaHoy = new Date().toISOString().split("T")[0];
 
-
-const currentPage = ref(1); // Página actual
-const itemsPerPage = 4; // Número de rutas por página
+// Página actual
+const currentPage = ref(1); 
+// Número de rutas por página
+const itemsPerPage = 4; 
+//Calculamos el total de páginas según el número de rutas y las rutas por página
 const totalPages = computed(() => Math.ceil(listaRutas.value.length / itemsPerPage));
 
 
-// Obtener las rutas para la página actual
+// Obtenemos las rutas para la página actual
 const paginatedRutas = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
     return listaRutas.value.slice(start, start + itemsPerPage);
 });
 
-// Cambiar de página
+// Cambiamos de página
 function cambiarPagina(pagina) {
     if (pagina >= 1 && pagina <= totalPages.value) {
         currentPage.value = pagina;
@@ -47,7 +52,7 @@ const guiaSeleccionado = ref("");
 const horaSeleccionada = ref("");
 const rutaAduplicar = ref(null);
 
-// Función para obtener las rutas
+// Obtenemos las rutas
 async function obtenerRutas() {
     try {
         const response = await fetch("http://localhost/APIFreetours/api.php/rutas");
@@ -60,8 +65,9 @@ async function obtenerRutas() {
     }
 }
 
-// Función para eliminar una ruta
+// Eliminamos una ruta
 async function eliminarRuta(id) {
+    // Mostramos un mensaje de confirmación
     const result = await Swal.fire({
         title: "¿Estás seguro?",
         text: "No podrás revertir este proceso.",
@@ -100,7 +106,7 @@ function abrirModalDuplicar(ruta) {
     new bootstrap.Modal(document.getElementById("modalDuplicarRuta")).show();
 }
 
-// Obtener guías disponibles cuando se seleccione la fecha
+// Obtenemos los guías disponibles cuando se seleccione la fecha
 async function filtrarGuias() {
     if (!fechaSeleccionada.value) return;
     try {
@@ -112,6 +118,7 @@ async function filtrarGuias() {
     }
 }
 
+// Comprobamos si se ha introducido la fecha antes de buscar guías
 function comprobarGuias() {
     if (!fechaSeleccionada.value) {
         Swal.fire({
@@ -123,13 +130,13 @@ function comprobarGuias() {
     }
 }
 
-// Función para duplicar la ruta
+// Duplicamos la ruta
 async function duplicarRuta() {
     if (!rutaAduplicar.value || !fechaSeleccionada.value || !guiaSeleccionado.value || !horaSeleccionada.value) {
         Swal.fire("Error", "Debe completar todos los campos antes de duplicar.", "error");
         return;
     }
-
+    //Creamos el objeto con los datos de la nueva ruta
     const nuevaRuta = {
         titulo: rutaAduplicar.value.titulo,
         localidad: rutaAduplicar.value.localidad,
@@ -155,8 +162,7 @@ async function duplicarRuta() {
         obtenerRutas();
         bootstrap.Modal.getInstance(document.getElementById("modalDuplicarRuta")).hide();
     } catch (err) {
-        error.value = err.message;
-        Swal.fire("Error", "No se pudo duplicar la ruta.", "error");
+        Swal.fire("Error", err.message, "error");
     }
 }
 
@@ -202,8 +208,10 @@ onMounted(obtenerRutas);
             </ul>
         </nav>
     </div>
+    <NoData v-else mensaje="No se encontraron rutas" submensaje="Cree una ruta para visualizarlas en este apartado." />
 
-    <!-- Modal Bootstrap -->
+
+    <!-- Modal para duplicar Ruta -->
     <div class="modal fade" id="modalDuplicarRuta" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

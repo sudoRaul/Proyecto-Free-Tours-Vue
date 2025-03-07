@@ -1,31 +1,65 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import NoData from "@/components/NoData.vue";
-import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js"; 
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const router = useRouter();
+
+// Cogemos el rol para evitar que se pueda entrar en otras vistas
 const sesion = localStorage.getItem("sesion");
 const rol = sesion ? JSON.parse(sesion).rol : null;
 
+// Redireccionamos a home si no es client
 if (rol !== "cliente") {
   router.push("/");
 }
 
+//Inicializamos la lista de rutas 
 const listaRutasFuturas = ref([]);
 const error = ref("");
-const emailUsuario = sesion ? JSON.parse(sesion).email: null;
+const emailUsuario = sesion ? JSON.parse(sesion).email : null;
+//Constante booleana para comprobar si está logueado o no
 const isLogued = !!rol;
 
 // Variables para la actualización de asistentes
 const reservaSeleccionada = ref(null);
 const numPersonas = ref(1);
 
+
+// Paginación
+const currentPage = ref(1);
+const itemsPerPage = 2;
+
+const paginatedRutas = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return listaRutasFuturas.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(listaRutasFuturas.value.length / itemsPerPage);
+});
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+}
+
+function prevPage() {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+}
+
+//Obtenemos y mostramos la información de la ruta
 function verDetallesRuta(id) {
   router.push(`/info-completa-ruta/${id}/${isLogued}`);
 }
 
+// Obtenemos las rutas pendientes del usuario
 async function obtenerRutas() {
   try {
     const response = await fetch("http://localhost/APIFreetours/api.php/reservas?email=" + emailUsuario);
@@ -33,13 +67,13 @@ async function obtenerRutas() {
 
     const data = await response.json();
     const hoy = new Date().toISOString().split("T")[0];
-
+    //Filtramos por las rutas a partir del día de hoy
     listaRutasFuturas.value = data.filter(ruta => ruta.ruta_fecha >= hoy);
   } catch (err) {
     error.value = err.message;
   }
 }
-
+// Cancelamos una reserva
 async function cancelarReserva(id) {
   const confirmacion = await Swal.fire({
     title: "¿Estás seguro?",
@@ -49,7 +83,7 @@ async function cancelarReserva(id) {
     confirmButtonText: "Sí, cancelar",
     cancelButtonText: "No, mantener"
   });
-
+  // Confirmamos la cancelación
   if (confirmacion.isConfirmed) {
     try {
       const response = await fetch(`http://localhost/APIFreetours/api.php/reservas?id=${id}`, {
@@ -70,16 +104,17 @@ async function cancelarReserva(id) {
 // Función para abrir el modal de actualización de asistentes
 function abrirModalActualizarAsistentes(ruta) {
   reservaSeleccionada.value = ruta;
-  numPersonas.value = ruta.num_personas; // Cargar el número actual de asistentes
-
+  // Cargamos el número actual de asistentes
+  numPersonas.value = ruta.num_personas; 
+  //Inicializamos y mostramos el modal de actualización de asistentes
   const modal = new bootstrap.Modal(document.getElementById("modalActualizarAsistentes"));
   modal.show();
 }
 
-// Función para actualizar el número de asistentes
+// Actualizamos el número de asistentes
 async function actualizarAsistentes() {
   if (!reservaSeleccionada.value) return;
-
+  // Comprobamos que introduzca un número válido de asistentes
   if (numPersonas.value < 1 || numPersonas.value > 8) {
     Swal.fire("Atención", "El número de asistentes debe estar entre 1 y 8", "warning");
     return;
@@ -94,6 +129,7 @@ async function actualizarAsistentes() {
 
     if (!response.ok) throw new Error("Error al actualizar la reserva");
 
+    //Filtramos para actualizar el número de asistentes
     const index = listaRutasFuturas.value.findIndex(ruta => ruta.reserva_id === reservaSeleccionada.value.reserva_id);
     if (index !== -1) {
       listaRutasFuturas.value[index].num_personas = numPersonas.value;
@@ -105,7 +141,7 @@ async function actualizarAsistentes() {
   }
 }
 
-
+//Cargamos las rutas 
 onMounted(obtenerRutas);
 
 </script>
@@ -118,7 +154,8 @@ onMounted(obtenerRutas);
     <div class="tarjetas row" v-if="listaRutasFuturas.length">
       <h2 class="text-center mt-4">Rutas Futuras</h2>
       <hr>
-      <div v-for="ruta in listaRutasFuturas" :key="ruta.ruta_id" class="col-md-6 mb-4">
+      <div v-for="ruta in paginatedRutas" :key="ruta.ruta_id" class="col-md-6 mb-4">
+        
         <div class="tarjeta bg-white shadow rounded p-4">
           <h2 class="text-center">{{ ruta.ruta_titulo }}</h2>
           <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="rounded ruta-img rounded img-fluid">
@@ -135,6 +172,13 @@ onMounted(obtenerRutas);
         </div>
       </div>
     </div>
+
+    <div class="d-flex justify-content-center mt-3">
+      <button class="btn btn-primary me-2" @click="prevPage" :disabled="currentPage === 1">Anterior</button>
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      <button class="btn btn-primary ms-2" @click="nextPage" :disabled="currentPage >= totalPages">Siguiente</button>
+    </div>
+
 
   </div>
   <NoData v-else mensaje="No tienes rutas reservadas" submensaje="Reserve alguna ruta para verlas en esta sección" />
@@ -190,7 +234,6 @@ onMounted(obtenerRutas);
   cursor: pointer;
   border-radius: 5px;
 }
-
 
 .valoracion:hover {
   background: #0056b3;

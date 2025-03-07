@@ -5,10 +5,12 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import router from "@/router";
 
+// Cogemos el rol para evitar que se pueda entrar en otras vistas
+
 const sesion = localStorage.getItem("sesion");
 const rol = sesion ? JSON.parse(sesion).rol : null;
 
-// Redirección si no es guía
+// Redireccionamos si no es admin
 if (rol !== "admin") {
   router.push("/");
 }
@@ -30,13 +32,14 @@ const formData = ref({
   guia: ""
 });
 
-// Obtener la fecha de hoy en formato YYYY-MM-DD
+// Obtenemos la fecha de hoy en formato YYYY-MM-DD
 const fechaHoy = new Date().toISOString().split("T")[0];
 const address = ref('');
 let map, marker;
 
+// Cargamos el mapa antes que la vista para evitar errores
 onMounted(() => {
-  map = L.map('map').setView([40.4168, -3.7038], 13); // Madrid por defecto
+  map = L.map('map').setView([40.4168, -3.7038], 13); 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
@@ -59,7 +62,7 @@ const searchLocation = async () => {
       .openPopup();
     map.setView([formData.value.latitud, formData.value.longitud], 13);
   } else {
-    alert('Dirección no encontrada');
+    Swal.fire("Error", "No se ha encontrado la dirección indicada", "error");
   }
 };
 
@@ -77,7 +80,7 @@ const horasDisponibles = ref([
   "19:00",
   "20:00",
 ]);
-
+// Filtramos los guías disponibles en la fecha seleccionada
 async function filtrarGuias() {
   try{
     const response = await fetch(`http://localhost/APIFreetours/api.php/asignaciones?fecha=${formData.value.fecha}`)
@@ -88,7 +91,7 @@ async function filtrarGuias() {
     err.message
   }
 }
-
+// Comprobamos que se haya introducido la fecha antes de buscar guías
 function comprobarGuias() {
   if(!formData.value.fecha){
     Swal.fire({
@@ -116,7 +119,7 @@ async function enviarFormulario() {
     Swal.fire("Campos obligatorios", "Todos los campos son requeridos.", "warning");
     return;
   }
-
+  //Creamos el objeto con los datos del formulario
   const nuevaRuta = {
     titulo: formData.value.titulo,
     localidad: formData.value.localidad,
@@ -213,6 +216,7 @@ async function enviarFormulario() {
           <select id="guia" class="form-select form-select-lg shadow-sm" @click="comprobarGuias" v-model="formData.guia">
             <option value="" disabled>Seleccione el guía</option>
             <option v-for="guia in listaGuias" :key="guia.id" :value="guia.id">{{ guia.nombre }}</option>
+            <option v-if="listaGuias.length == 0" value="" disabled>No hay guías disponibles en esta fecha</option>
           </select>
         </div> 
 

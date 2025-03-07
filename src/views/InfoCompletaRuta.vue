@@ -5,9 +5,11 @@ import Swal from "sweetalert2";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-
+// Inicializamos el router
 const router = useRouter()
 const route = useRoute();
+
+//Cogemos los parámetro necesarios para hacer las peticiones
 const idRuta = ref(route.params.id);
 const isReservado = ref(route.params.logued);
 const infoRuta = ref([]);
@@ -16,13 +18,12 @@ let map;
 
 
 const sesion = localStorage.getItem("sesion");
+// Cogemos el id y el rol del usuario logueado
 const cliente_id = sesion ? JSON.parse(sesion).id : null;
 const cliente_rol = sesion ? JSON.parse(sesion).rol : null;
 
 
 const email = sesion ? JSON.parse(sesion).email : null;
-
-const url = route.path.split("/")[1]
 
 // Obtenemos la información de la ruta
 function obtenerInfo() {
@@ -41,13 +42,13 @@ function inicializarMapas() {
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
   }).addTo(map);
-  L.marker([infoRuta.value.latitud, infoRuta.value.longitud]).addTo(map).openPopup();
+  L.marker([infoRuta.value.latitud, infoRuta.value.longitud]).addTo(map).bindPopup(infoRuta.value.localidad).openPopup();
   map.setView([infoRuta.value.latitud, infoRuta.value.longitud], 13);
 }
 
 // Realizamos la reserva
 async function reservarRuta() {
-
+  //Comprobamos que el usuario esté logueado, y que introduzca un valor válido
   if (!email) {
     Swal.fire("Error", "No se pudo obtener el email del usuario. Inicia sesión nuevamente.", "error");
     numPersonas.value = 1;
@@ -63,7 +64,7 @@ async function reservarRuta() {
     numPersonas.value = 1;
     return;
   }
-
+  // Creamos el objeto con los datos de la reserva
   const reservaData = {
     ruta_id: idRuta.value,
     email: email, 
@@ -93,6 +94,7 @@ async function reservarRuta() {
   }
 }
 
+// Comprobamos si el usuario está logueado
 function comprobarLogin(){
   if(!cliente_id){
     Swal.fire({
@@ -103,12 +105,12 @@ function comprobarLogin(){
     return;
   }
 }
-
+// Redirigimos a mis reservas al reservar
 function volverReservas(){
   router.push('/mis-reservas')
 }
 
-
+// Cargamos la información de la ruta
 onMounted(obtenerInfo);
 </script>
 
@@ -165,8 +167,6 @@ onMounted(obtenerInfo);
     </div>
   </div>
 </template>
-
-
 <style scoped>
 
 button {
