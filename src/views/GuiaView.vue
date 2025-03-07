@@ -151,7 +151,7 @@ function inicializarMapas() {
       <div v-for="ruta in paginatedRutas" :key="ruta.ruta_id" class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 row">
         <div class="tarjeta bg-white shadow rounded p-4 row text-start">
           <h3 class="text-center mb-3 col-md-12">{{ ruta.ruta_titulo }}</h3>
-          <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="img-fluid col-md-10 rounded">
+          <img :src="ruta.ruta_foto" alt="Imagen de la ruta" class="img-fluid col-md-10 rounded prueba">
 
           <main class="col-12 row mt-3">
             <p class="text-gray-700 font-semibold col-6 fs-5 border rounded text-center">📍 {{ ruta.ruta_localidad }}
@@ -175,12 +175,12 @@ function inicializarMapas() {
                 </thead>
                 <tbody>
                   <tr v-for="reserva in ruta.reservas" :key="reserva.reserva_id">
-                    <td headers="nombre" class="text-center">{{ reserva.cliente.nombre }}</td>
-                    <td headers="asistentes" class="text-center">
+                    <td headers="nombre" class="text-center fs-5">{{ reserva.cliente.nombre }}</td>
+                    <td headers="asistentes" class="text-center fs-5">
                       {{ reserva.num_personas }}
                     </td>
                     <td headers="editar">
-                      <button @click="abrirModal(reserva)" class="btn btn-sm btn-warning ms-2 text-center">✏️</button>
+                      <button @click="abrirModal(reserva)" class="btn btn-sm btn-warning ms-2 text-center fs-5">✏️</button>
                     </td>
                   </tr>
                 </tbody>
@@ -262,5 +262,7 @@ th{
   background-color: rgb(96, 252, 96);
 }td{
   background-color: rgb(216, 250, 216);
+}.prueba{
+  height: 300px;
 }
 </style>
