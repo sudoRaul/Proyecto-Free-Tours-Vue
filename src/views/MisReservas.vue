@@ -28,32 +28,6 @@ const reservaSeleccionada = ref(null);
 const numPersonas = ref(1);
 
 
-// Paginación
-const currentPage = ref(1);
-const itemsPerPage = 2;
-
-const paginatedRutas = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return listaRutasFuturas.value.slice(start, end);
-});
-
-const totalPages = computed(() => {
-  return Math.ceil(listaRutasFuturas.value.length / itemsPerPage);
-});
-
-function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-}
-
-function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-}
-
 //Obtenemos y mostramos la información de la ruta
 function verDetallesRuta(id) {
   router.push(`/info-completa-ruta/${id}/${isLogued}`);
@@ -141,6 +115,25 @@ async function actualizarAsistentes() {
   }
 }
 
+const currentPage = ref(1); 
+// Número de rutas por página
+const itemsPerPage = 2; 
+//Calculamos el total de páginas según el número de rutas y las rutas por página
+const totalPages = computed(() => Math.ceil(listaRutasFuturas.value.length / itemsPerPage));
+
+
+// Obtenemos las rutas para la página actual
+const paginatedRutas = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    return listaRutasFuturas.value.slice(start, start + itemsPerPage);
+});
+// Cambiamos de página
+function cambiarPagina(pagina) {
+    if (pagina >= 1 && pagina <= totalPages.value) {
+        currentPage.value = pagina;
+    }
+}
+
 //Cargamos las rutas 
 onMounted(obtenerRutas);
 
@@ -173,11 +166,21 @@ onMounted(obtenerRutas);
       </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
-      <button class="btn btn-primary me-2" @click="prevPage" :disabled="currentPage === 1">Anterior</button>
-      <span>Página {{ currentPage }} de {{ totalPages }}</span>
-      <button class="btn btn-primary ms-2" @click="nextPage" :disabled="currentPage >= totalPages">Siguiente</button>
-    </div>
+    <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="cambiarPagina(currentPage - 1)">Anterior</button>
+                </li>
+
+                <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                    <button class="page-link" @click="cambiarPagina(page)">{{ page }}</button>
+                </li>
+
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <button class="page-link" @click="cambiarPagina(currentPage + 1)">Siguiente</button>
+                </li>
+            </ul>
+        </nav>
 
 
   </div>

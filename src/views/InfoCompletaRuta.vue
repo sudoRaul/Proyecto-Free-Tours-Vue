@@ -129,7 +129,7 @@ onMounted(obtenerInfo);
         <p class="fs-5"><strong>⌚ Horario:</strong> {{ infoRuta.hora }}</p>
         <p class="fs-5"><strong>📔 Descripción:</strong> {{ infoRuta.descripcion }}</p>
 
-        <button v-if="isReservado" class="btn btn-primary" @click="volverReservas">Volver a Reservas</button>
+        <button v-if="isReservado" class="btn btn-primary fs-5" @click="volverReservas"><strong>Volver a Reservas</strong></button>
         <strong v-else-if="cliente_rol!='cliente'" class="fs-5 text-primary">Inicie sesión como cliente para reservar una ruta</strong>
         <button v-else-if="cliente_id" class="btn btn-primary fs-4 mt-3" data-bs-toggle="modal" data-bs-target="#reservaModal"><strong>Reservar Ruta</strong></button>
         <button v-else class="btn btn-primary fs-4" @click="comprobarLogin"><strong>Reservar Ruta</strong></button>
