@@ -55,7 +55,7 @@ async function guardarCambios() {
 
     // Buscamos la reserva original en la lista y la actualizamos directamente
     const reservaIndex = listaRutas.value
-    // Aseguramos que se accede a todas las reservas
+    // Aseguramos que se accede a todas las reservas modificando cada elemento del array y aplanándolo
       .flatMap(ruta => ruta.reservas) 
       .findIndex(r => r.reserva_id === reservaSeleccionada.value.reserva_id);
 
