@@ -50,11 +50,24 @@
 
 ## ✨ Capturas de Pantalla
 
-> *Incluir caps*
+### Home Page 🏠
+![HomePage](./screenshots/capturaHomePage.png)
 
-```bash
-📁 /public/screenshots/
-```
+---
+
+### Valoración de los usuarios ⭐⭐⭐
+![Usuario](./screenshots/capturaUsuario.png)
+
+--- 
+
+### Rutas pendientes de los guías 🚶‍♂️
+![Usuario](./screenshots/capturaGuia.png)
+
+---
+
+### Visualización de rutas desde el administrador 🔐
+![Usuario](./screenshots/capturaAdmin.png)
+
 
 ---
 
