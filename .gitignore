@@ -1,0 +1,30 @@
+# Logs
+Front-End/logs
+Front-End/*.log
+Front-End/npm-debug.log*
+Front-End/yarn-debug.log*
+Front-End/yarn-error.log*
+Front-End/pnpm-debug.log*
+Front-End/lerna-debug.log*
+
+Front-End/node_modules
+Front-End/.DS_Store
+Front-End/dist
+Front-End/dist-ssr
+Front-End/coverage
+Front-End/*.local
+
+Front-End/cypress/videos/
+Front-End/cypress/screenshots/
+
+# Editor directories and files
+Front-End/.vscode/*
+Front-End/!.vscode/extensions.json
+Front-End/.idea
+Front-End/*.suo
+Front-End/*.ntvs*
+Front-End/*.njsproj
+Front-End/*.sln
+Front-End/*.sw?
+
+Front-End/*.tsbuildinfo
