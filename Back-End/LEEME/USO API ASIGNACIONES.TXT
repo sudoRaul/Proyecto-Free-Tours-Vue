@@ -1,0 +1,51 @@
+EndPoints de la API:
+
+--------------------------------------------------------------
+Para gestionar ASIGNACIONES :  http://localhost/api.php/asignaciones
+--------------------------------------------------------------
+1. Obtener asignaciones por guia_id (GET)
+Si deseas obtener las asignaciones para un guía específico, con 
+todos los datos de la ruta y con sus reservas, para tener el nombre 
+de la persona que reserva junto con el número de los asistentes:
+
+const guiaId = 1; // ID del guía
+
+fetch(`http://localhost/api.php/asignaciones?guia_id=${guiaId}`, {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Asignaciones del guía:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+2. Obtener guías disponibles para una fecha (GET con fecha)
+Para obtener los guías disponibles para una fecha específica, puedes usar el siguiente código:
+
+const fecha = '2025-02-10'; // Fecha específica
+
+fetch(`http://localhost/api.php/asignaciones?fecha=${fecha}`, {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Guias disponibles en la fecha:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+3. Crear o actualizar una asignación (POST)
+Cómo crear o actualizar una asignación de un guía a una ruta siempre
+que no se haga en el forumlario de crear ruta. Solo usar para asignar
+independiemente de la creación:
+
+const asignacionData = {
+    ruta_id: 1, // ID de la ruta
+    guia_id: 2  // ID del guía
+};
+
+fetch('http://localhost/api.php/asignaciones', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(asignacionData)
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));

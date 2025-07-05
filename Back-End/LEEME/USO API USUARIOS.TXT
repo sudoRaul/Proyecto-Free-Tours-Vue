@@ -1,0 +1,87 @@
+EndPoints de la API:
+
+--------------------------------------------------------------
+Para gestionar USUARIOS :  http://localhost/api.php/usuarios
+--------------------------------------------------------------
+1. Obtener todos los usuarios (GET)
+Este es el ejemplo de cómo hacer una solicitud GET para obtener todos los usuarios:
+
+fetch('http://localhost/api.php/usuarios', {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Usuarios:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+2. Iniciar sesión (POST)
+Para hacer un login, deberás enviar un correo y contraseña a través de un cuerpo JSON:
+
+const loginData = {
+    email: 'usuario@example.com',
+    contraseña: 'miContraseña123'
+};
+
+fetch('http://localhost/api.php/usuarios?login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(loginData)
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'success') {
+        console.log('Login exitoso:', data.user);
+    } else {
+        console.log('Error de login:', data.message);
+    }
+})
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+3. Crear un usuario (Registro)
+Este ejemplo muestra cómo enviar los datos de un nuevo usuario para crear un registro:
+
+const userData = {
+    nombre: 'Nuevo Usuario',
+    email: 'nuevo@example.com',
+    contraseña: 'miContraseña123'
+};
+
+fetch('http://localhost/api.php/usuarios', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+4. Actualizar el rol de un usuario (PUT)
+Para actualizar el rol de un usuario (por ejemplo, cambiar a guía), puedes usar este código:
+
+const updatedRole = {
+    rol: 'admin'
+};
+
+fetch('http://localhost/api.php/usuarios?id=1', {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedRole)
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+5. Eliminar un usuario (DELETE)
+Este ejemplo muestra cómo eliminar un usuario por su id:
+
+fetch('http://localhost/api.php?id=1', {
+    method: 'DELETE',
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));

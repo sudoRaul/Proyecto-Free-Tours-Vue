@@ -1,0 +1,90 @@
+EndPoints de la API:
+
+--------------------------------------------------------------
+Para gestionar VALORACIONES :  http://localhost/api.php/valoraciones
+--------------------------------------------------------------
+1. Obtener todas las valoraciones (GET):
+
+fetch('http://localhost/api.php/valoraciones')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Lista de valoraciones:', data);
+    // Procesar los datos según sea necesario
+  })
+  .catch(error => {
+    console.error('Error al obtener las valoraciones:', error);
+  });
+
+--------------------------------------------------------------
+2. Obtener las valoraciones de una ruta (GET):
+const rutaId = 1; // Reemplaza con el ID de la ruta deseada
+fetch(`http://localhost/api.php/valoraciones?ruta_id=${rutaId}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(`Valoraciones para la ruta ${rutaId}:`, data);
+    // Procesar los datos según sea necesario
+  })
+  .catch(error => {
+    console.error(`Error al obtener las valoraciones para la ruta ${rutaId}:`, error);
+  });
+
+--------------------------------------------------------------
+3. Obtener valoraciones por usuario (GET):
+const userId = 1; // Reemplaza con el ID del usuario deseado
+fetch(`http://localhost/api.php/valoraciones?user_id=${userId}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(`Valoraciones del usuario ${userId}:`, data);
+    // Procesar los datos según sea necesario
+  })
+  .catch(error => {
+    console.error(`Error al obtener las valoraciones del usuario ${userId}:`, error);
+  });
+
+--------------------------------------------------------------
+4.Crear una nueva valoración
+
+const nuevaValoracion = {
+  user_id: 1, // ID del usuario que realiza la valoración
+  ruta_id: 2, // ID de la ruta valorada
+  estrellas: 5, // Puntuación de 1 a 5
+  comentario: 'Excelente ruta, muy recomendada.' //Este campo es opcional
+};
+
+fetch('http://localhost/api.php/valoraciones', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(nuevaValoracion)
+})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Valoración creada:', data);
+    // Manejar la respuesta según sea necesario
+  })
+  .catch(error => {
+    console.error('Error al crear la valoración:', error);
+  });
+
+

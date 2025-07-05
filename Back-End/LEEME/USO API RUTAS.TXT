@@ -1,0 +1,82 @@
+EndPoints de la API:
+
+--------------------------------------------------------------
+Para gestionar RUTAS :  http://localhost/api.php/rutas
+--------------------------------------------------------------
+1. Obtener todas las rutas (GET)
+Para obtener todas las rutas con el guía asignado (si lo hay) y el número de asistentes:
+
+fetch('http://localhost/api.php/rutas', {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Rutas:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+2. Obtener rutas por fecha y localidad (GET con parámetros)
+Si deseas obtener rutas para una fecha específica y una localidad opcional, puedes usar este código:
+
+const fecha = '2025-02-10';
+const localidad = 'Madrid'; // Opcional
+
+fetch(`http://localhost/api.php/rutas?fecha=${fecha}&localidad=${localidad}`, {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Rutas filtradas:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+3. Obtener una ruta específica por ID (GET con ID)
+Si deseas obtener detalles de una ruta específica, incluyendo el número de asistentes, por ID:
+
+const rutaId = 1;
+
+fetch(`http://localhost/api.php/rutas?id=${rutaId}`, {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Ruta:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+4. Crear una nueva ruta (POST)
+Este ejemplo muestra cómo crear una nueva ruta y asignarle un guía (si se proporciona el ID del guía):
+
+const rutaData = {
+    titulo: 'Ruta por el Parque',
+    localidad: 'Madrid',
+    descripcion: 'Recorrido por el parque central de Madrid',
+    foto: 'ruta_parque.jpg',
+    fecha: '2025-02-10',
+    hora: '10:00',
+    latitud: '40.7128',
+    longitud: '-74.0060',
+    guia_id: 2 // ID del guía (opcional)
+};
+
+fetch('http://localhost/api.php/rutas', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(rutaData)
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
+--------------------------------------------------------------
+OJO: Para crear rutas, se puede asignar el guía durante la creación,
+para ello hay que usar la api de asignaciones --> VER API ASIGNACIONES
+--------------------------------------------------------------
+5. Eliminar una ruta (DELETE)
+Para eliminar una ruta específica por su ID, puedes usar este ejemplo:
+
+
+const rutaId = 1;
+
+fetch(`http://localhost/api.php/rutas?id=${rutaId}`, {
+    method: 'DELETE',
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
+

@@ -1,0 +1,59 @@
+EndPoints de la API:
+
+--------------------------------------------------------------
+Para gestionar RESERVAS :  http://localhost/api.php/reservas
+--------------------------------------------------------------
+1. Obtener todas las reservas 
+Este es un ejemplo de cómo obtener todas las reservas:
+
+// Obtener todas las reservas
+fetch('http://localhost/api.php/reservas', {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Reservas:', data))
+.catch(error => console.error('Error:', error));
+
+--------------------------------------------------------------
+2. Obtener las reservas de un usuario específico por su email (GET)
+const userEmail = 'usuario@ejemplo.com'; // Email del usuario
+fetch(`http://localhost/api.php/reservas?email=${userEmail}`, {
+    method: 'GET',
+})
+.then(response => response.json())
+.then(data => console.log('Reservas del usuario:', data))
+.catch(error => console.error('Error:', error));
+
+--------------------------------------------------------------
+3. Crear una nueva reserva (POST)
+Para crear una nueva reserva, debes enviar el email del cliente, el ruta_id y el número de personas:
+
+const reservaData = {
+    email: 'usuario@ejemplo.com', // Email del cliente
+    ruta_id: 1,                   // ID de la ruta
+    num_personas: 4              // Número de personas para la reserva
+};
+
+fetch('http://localhost/api.php/reservas', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(reservaData)
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
+
+--------------------------------------------------------------
+4. Eliminar una reserva (DELETE)
+Para eliminar una reserva, necesitas el id de la reserva a eliminar:
+
+const reservaId = 1; // ID de la reserva a eliminar
+
+fetch(`http://localhost/api.php/reservas?id=${reservaId}`, {
+    method: 'DELETE',
+})
+.then(response => response.json())
+.then(data => console.log('Respuesta:', data))
+.catch(error => console.error('Error:', error));
