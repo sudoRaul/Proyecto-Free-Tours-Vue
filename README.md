@@ -52,22 +52,22 @@
 ## ✨ Capturas de Pantalla
 
 ### Home Page 🏠
-![HomePage](./screenshots/capturaHomePage.png)
+![HomePage](./Front-End/screenshots/capturaHomePage.png)
 
 ---
 
 ### Valoración de los usuarios ⭐⭐⭐
-![Usuario](./screenshots/capturaUsuario.png)
+![Usuario](./Front-End/screenshots/capturaUsuario.png)
 
 --- 
 
 ### Rutas pendientes de los guías 🚶‍♂️
-![Usuario](./screenshots/capturaGuia.png)
+![Usuario](./Front-End/screenshots/capturaGuia.png)
 
 ---
 
 ### Visualización de rutas desde el administrador 🔐
-![Usuario](./screenshots/capturaAdmin.png)
+![Usuario](./Front-End/screenshots/capturaAdmin.png)
 
 
 ---
